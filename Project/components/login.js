@@ -1,6 +1,6 @@
 import React, {Component } from 'react';
 import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert  } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 class login extends Component {
@@ -23,7 +23,34 @@ class login extends Component {
   }
 
 
-  login = () => {
+  login = async () => {
+    return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.state)
+      })
+      .then((response)=> {
+        if (response.status === 200){
+          return response.json()
+        }
+        else if(response.status === 400){
+          throw 'Incorrect email or password';
+        }
+        else{
+          throw 'wrong'
+        }
+      })
+      .then(async (responseJson)=>{
+        console.log(responseJson)
+        await AsyncStorage.setItem('@session_token', responseJson.token);
+        this.props.navigation.navigate("home")
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show(error, ToastAndroid.SHORT)
+      })
     Alert.alert(this.state.password, this.state.email)
   }
 

@@ -8,7 +8,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import login from './components/login';
 import signup from './components/signup';
-
+import home from './components/home';
+import profile from './components/profile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -20,18 +22,40 @@ const Tabs = createBottomTabNavigator();
 class HelloWorldApp extends Component {
     render(){
 
+      const value = AsyncStorage.getItem('@session_token');
+      
+      if (value == null) {
         return (
-            <NavigationContainer>
-              <Tabs.Navigator tabBarOptions={{
-                activeTintColor: 'blue',
-                inactiveTintColor: 'grey',
-                labelStyle: {fontSize: 30}}}
-              initialRouteName="login"> 
-                <Tabs.Screen name="login" component={login}></Tabs.Screen>
-                <Tabs.Screen name="signup" component={signup}></Tabs.Screen>
-              </Tabs.Navigator>
-            </NavigationContainer>
-        );
+          <NavigationContainer>
+             <Tabs.Navigator tabBarOptions={{
+              activeTintColor: 'blue',
+               inactiveTintColor: 'grey',
+               labelStyle: {fontSize: 30}}}
+            initialRouteName="login"> 
+               <Tabs.Screen name="login" component={login}></Tabs.Screen>
+              <Tabs.Screen name="signup" component={signup}></Tabs.Screen>
+            </Tabs.Navigator>
+           </NavigationContainer>
+      );
+      }
+      else{
+        return (
+          <NavigationContainer>
+             <Tabs.Navigator tabBarOptions={{
+              activeTintColor: 'blue',
+               inactiveTintColor: 'grey',
+               labelStyle: {fontSize: 30}}}
+            initialRouteName="home"> 
+               <Tabs.Screen name="home" component={home}></Tabs.Screen>
+              <Tabs.Screen name="profile" component={profile}></Tabs.Screen>
+            </Tabs.Navigator>
+           </NavigationContainer>
+      );
+
+      }
+      
+
+      
     }
 }
 
