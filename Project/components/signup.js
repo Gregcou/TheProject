@@ -34,6 +34,10 @@ class signup extends Component {
   }
 
   signUp = () => {
+    if(this.state.first_name == "" || this.state.last_name == "" || this.state.email == "" || this.state.password == "" ){
+      ToastAndroid.show("Enter first name, last name, email and password", ToastAndroid.SHORT)
+    }
+    else{
       let to_send = {
         first_name: this.state.first_name,
         last_name: this.state.last_name,
@@ -49,7 +53,6 @@ class signup extends Component {
         body: JSON.stringify(to_send)
       })
       .then((response)=> {
-        Alert.alert("Account created");
         if (response.status === 201){
           return response.json()
         }
@@ -61,13 +64,16 @@ class signup extends Component {
         }
       })
       .then((responseJson)=>{
-        ToastAndroid.show("Account created", ToastAndroid.SHORT)
+        ToastAndroid.show("Account created", ToastAndroid.LONG)
         this.props.navigation.navigate("login")
       })
       .catch((error) => {
         console.log(error);
         ToastAndroid.show(error, ToastAndroid.SHORT)
       })
+
+    }
+      
   }
 
     render(){

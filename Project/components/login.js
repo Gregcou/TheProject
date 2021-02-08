@@ -1,5 +1,5 @@
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert  } from 'react-native';
+import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -24,7 +24,11 @@ class login extends Component {
 
 
   login = async () => {
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
+    if(this.state.email == "" || this.state.password == "" ){
+      ToastAndroid.show("Both an email and password are needed to login", ToastAndroid.LONG)
+    }
+    else{
+      return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -51,7 +55,7 @@ class login extends Component {
         console.log(error);
         ToastAndroid.show(error, ToastAndroid.SHORT)
       })
-    Alert.alert(this.state.password, this.state.email)
+    }
   }
 
     render(){
@@ -60,8 +64,8 @@ class login extends Component {
         
         return (
             <View style={styles.flexContainer}>
-                <Text style={styles.formLabel}>login</Text>
-                <TextInput placeholder="Username" onChangeText={this.updateEmail}/>
+                <Text style={styles.formLabel}>Login</Text>
+                <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
                 <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
                 <Button title="Log in" onPress={this.login}/>
             </View>

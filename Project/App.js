@@ -19,40 +19,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Tabs = createBottomTabNavigator();
 
 
-class HelloWorldApp extends Component {
-    render(){
 
-      const value = AsyncStorage.getItem('@session_token');
+class HelloWorldApp extends Component {
+  
+
+    render(){ 
       
-      if (value == null) {
-        return (
-          <NavigationContainer>
-             <Tabs.Navigator tabBarOptions={{
-              activeTintColor: 'blue',
-               inactiveTintColor: 'grey',
-               labelStyle: {fontSize: 30}}}
-            initialRouteName="login"> 
-               <Tabs.Screen name="login" component={login}></Tabs.Screen>
+      
+      return (
+        <NavigationContainer>
+            <Tabs.Navigator tabBarOptions={{activeTintColor: 'blue', inactiveTintColor: 'grey',labelStyle: {fontSize: 30}}}initialRouteName="login">
+              <Tabs.Screen name="login" component={login}></Tabs.Screen>
               <Tabs.Screen name="signup" component={signup}></Tabs.Screen>
-            </Tabs.Navigator>
-           </NavigationContainer>
-      );
-      }
-      else{
-        return (
-          <NavigationContainer>
-             <Tabs.Navigator tabBarOptions={{
-              activeTintColor: 'blue',
-               inactiveTintColor: 'grey',
-               labelStyle: {fontSize: 30}}}
-            initialRouteName="home"> 
-               <Tabs.Screen name="home" component={home}></Tabs.Screen>
+              <Tabs.Screen name="home" component={home}></Tabs.Screen>
               <Tabs.Screen name="profile" component={profile}></Tabs.Screen>
             </Tabs.Navigator>
-           </NavigationContainer>
+         </NavigationContainer>
       );
-
-      }
       
 
       

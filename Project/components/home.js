@@ -1,14 +1,25 @@
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image  } from 'react-native';
+import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Reviewlist from './reviewlist';
 
 class home extends Component {
+
+    constructor(props){
+        super(props);
+
+        this.state={
+            isLoading: true,
+            locations: []
+        }
+    }
     
 
     componentDidMount() {
         this.unsubscribe - this.props.navigation.addListener('focus', () => {
             this.checkLoggedIn();
         });
+        this.getData();
     }
 
     componentWillUnmount() {
@@ -23,24 +34,75 @@ class home extends Component {
     }
 
     logOut = () =>{
+        console.log("logout function");
         AsyncStorage.removeItem('@session_token');
         this.checkLoggedIn()
     }
+
+    getData = async () => {
+        console.log("getdata");
+        const value = await AsyncStorage.getItem('@session_token');
+        return fetch('http://10.0.2.2:3333/api/1.0.0/find',
+        {headers: {
+            'X-Authorization': value
+          }},)
+        .then((response)=> {
+            if (response.status === 200){
+                return response.json()
+            }
+            else if(response.status === 401){
+                throw 'not logged in';
+            }
+            else{
+                throw 'wrong'
+            }
+          })
+        .then((responseJson) => {
+            this.setState({
+                isLoading: false,
+                locations: responseJson,
+            });
+        })
+        .catch((error) =>{
+            console.log(error);
+        });
+}
 
     
 
     render(){
 
         const navigation = this.props.navigation;
+        if(this.state.isLoading){
+            return(
+                <View>
+                    <Text>Loading...</Text>
+                    <ActivityIndicator/>
+                </View>
+            );
+        }
+        else{
+            return (
+                <View>
+                    {console.log("vieww")}
+                    <FlatList
+                        data={this.state.locations}
+                        renderItem={({item}) => (
+                            <View>
+                                <Text>{item.location_name}</Text>
+                                <Text>{item.location_town}</Text>
+                                <Reviewlist data={item.location_reviews}></Reviewlist>
+                                {console.log(item.location_name + "t")}
+                            </View>
+                        )}
+                        keyExtractor={(item,index) => item.location_id.toString()}
+                    />
+                    {console.log("after flatlist")}
+                    <Button title="log out" onPress={() => this.logOut()}/>
+                </View>
+            );
+        }      
         
-        return (
-            <View style={styles.flexContainer}>
-                <Text style={styles.formLabel}>home</Text>
-                <TextInput placeholder="Username"/>
-                <TextInput placeholder="Password"/>
-                <Button title="button" onPress={() => this.logOut()}/>
-            </View>
-        );
     }
 }
 
