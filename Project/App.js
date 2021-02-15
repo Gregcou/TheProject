@@ -10,28 +10,42 @@ import login from './components/login';
 import signup from './components/signup';
 import home from './components/home';
 import profile from './components/profile';
+import location from './components/location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import reviews from './components/reviews';
 
 
 
 
 
 const Tabs = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-
+function homestack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="home" component={home} />
+      <Stack.Screen name="location" component={location} />
+      <Stack.Screen name="reviews" component={reviews} />
+    </Stack.Navigator>
+  );
+}
 
 class HelloWorldApp extends Component {
+
+  
   
 
     render(){ 
       
+
       
       return (
         <NavigationContainer>
             <Tabs.Navigator tabBarOptions={{activeTintColor: 'blue', inactiveTintColor: 'grey',labelStyle: {fontSize: 30}}}initialRouteName="login">
               <Tabs.Screen name="login" component={login}></Tabs.Screen>
               <Tabs.Screen name="signup" component={signup}></Tabs.Screen>
-              <Tabs.Screen name="home" component={home}></Tabs.Screen>
+              <Tabs.Screen name="homestack" component={homestack}></Tabs.Screen>
               <Tabs.Screen name="profile" component={profile}></Tabs.Screen>
             </Tabs.Navigator>
          </NavigationContainer>

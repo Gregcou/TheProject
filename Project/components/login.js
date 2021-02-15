@@ -61,7 +61,6 @@ class login extends Component {
     render(){
 
         const navigation = this.props.navigation;
-        
         return (
             <View style={styles.flexContainer}>
                 <Text style={styles.formLabel}>Login</Text>

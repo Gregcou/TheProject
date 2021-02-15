@@ -15,7 +15,7 @@ class Reviewlist extends Component {
 
     render(){
 
-        const reviews = this.props.data;
+        const reviews = this.props.data[0];
         
         return (
             <View style={styles.flexContainer}>

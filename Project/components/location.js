@@ -1,22 +1,76 @@
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image  } from 'react-native';
-
-
+import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ActivityIndicator  } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Reviewlist from './reviewlist';
 
 class location extends Component {
-    render(){
 
-        const navigation = this.props.navigation;
-        
+
+  constructor(props){
+    super(props);
+
+    this.state={
+      isLoading: true,
+      location: [],
+      loc_id: 0
+    }
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    console.log("getdata");
+    const {loc_id} = this.props.route.params;
+    this.state.loc_id = JSON.stringify(loc_id)
+    const value = await AsyncStorage.getItem('@session_token');
+    console.log(value);
+    return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.loc_id,
+    {headers: {
+        'X-Authorization': value
+      }},)
+    .then((response)=> {
+        if (response.status === 200){
+            return response.json()
+        }
+        else if(response.status === 401){
+            throw 'not logged in';
+        }
+        else{
+            throw 'wrong'
+        }
+      })
+    .then((responseJson) => {
+        this.setState({
+            isLoading: false,
+            location: responseJson,
+        });
+    })
+    .catch((error) =>{
+        console.log(error);
+    });
+}
+
+
+  render(){
+    const navigation = this.props.navigation;
         return (
             <View style={styles.flexContainer}>
-                <Text style={styles.formLabel}>location</Text>
-                <TextInput placeholder="Username"/>
-                <TextInput placeholder="Password"/>
-                <Button title="button" onPress={() => console.log("button press login")}/>
+                {console.log(this.state.loc_id)}
+                <Text style={styles.formLabel}>{this.state.loc_id}</Text>
+                <Text style={styles.formLabel}>{this.state.location.location_name}</Text>
+                <Text style={styles.formLabel}>{this.state.location.location_town}</Text>
+                <Reviewlist data={this.state.location.location_reviews,this.state.location.loc_id}></Reviewlist>
+                {console.log("location after flatlist 2")}
+                {/* <Button title="log out" onPress={() => this.logOut()}/> */}
             </View>
-        );
-    }
+        );   
+    
+  }
+
+    
+  
 }
 
 const styles = StyleSheet.create({
@@ -25,11 +79,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   formLabel: {
-    fontSize:15,
+    fontSize:40,
     color:'steelblue',
   },
-  pic: {
-    flex: 8
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   viewText: {
     flex: 4,
