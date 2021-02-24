@@ -1,7 +1,8 @@
 import React, {Component } from 'react';
 import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ActivityIndicator  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Reviewlist from './reviewlist';
+import LocationComponent from './renderComponents/locationComponent';
+import { shared_styles } from './Styles/Shared';
 
 class location extends Component {
 
@@ -11,8 +12,7 @@ class location extends Component {
 
     this.state={
       isLoading: true,
-      location: [],
-      loc_id: 0
+      location: null
     }
   }
 
@@ -54,18 +54,22 @@ class location extends Component {
 
 
   render(){
-    const navigation = this.props.navigation;
-        return (
-            <View style={styles.flexContainer}>
-                {console.log(this.state.loc_id)}
-                <Text style={styles.formLabel}>{this.state.loc_id}</Text>
-                <Text style={styles.formLabel}>{this.state.location.location_name}</Text>
-                <Text style={styles.formLabel}>{this.state.location.location_town}</Text>
-                <Reviewlist data={this.state.location.location_reviews,this.state.location.loc_id}></Reviewlist>
-                {console.log("location after flatlist 2")}
-                {/* <Button title="log out" onPress={() => this.logOut()}/> */}
-            </View>
-        );   
+    if(this.state.isLoading){
+      return(
+          <View>
+              <Text>Loading...</Text>
+              <ActivityIndicator/>
+          </View>
+      );
+    }
+    else{
+      return (
+        <View style={shared_styles.flexContainer}>
+            <LocationComponent data={this.state.location}></LocationComponent>
+        </View>
+    );
+  }
+           
     
   }
 
@@ -73,26 +77,6 @@ class location extends Component {
   
 }
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  formLabel: {
-    fontSize:40,
-    color:'steelblue',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 
 

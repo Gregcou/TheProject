@@ -1,7 +1,7 @@
 import React, {Component } from 'react';
 import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { shared_styles } from './Styles/Shared';
 
 class login extends Component {
 
@@ -49,6 +49,7 @@ class login extends Component {
       .then(async (responseJson)=>{
         console.log(responseJson)
         await AsyncStorage.setItem('@session_token', responseJson.token);
+        await AsyncStorage.setItem('@user_id',  responseJson.id.toString());
         this.props.navigation.navigate("home")
       })
       .catch((error) => {
@@ -62,8 +63,8 @@ class login extends Component {
 
         const navigation = this.props.navigation;
         return (
-            <View style={styles.flexContainer}>
-                <Text style={styles.formLabel}>Login</Text>
+            <View style={shared_styles.flexContainer}>
+                <Text style={shared_styles.formLabel}>Login</Text>
                 <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
                 <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
                 <Button title="Log in" onPress={this.login}/>
@@ -72,24 +73,6 @@ class login extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  formLabel: {
-    fontSize:15,
-    color:'red',
-  },
-  pic: {
-    flex: 8
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 
 

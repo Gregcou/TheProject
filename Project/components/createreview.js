@@ -2,6 +2,7 @@ import React, {Component } from 'react';
 import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid  } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import shared_styles from './components/Styles/Shared';
 
 
 class createreview extends Component {
@@ -66,11 +67,11 @@ class createreview extends Component {
         const navigation = this.props.navigation;
         
         return (
-            <View style={styles.flexContainer}>
+            <View style={shared_styles.flexContainer}>
               <RNCamera ref={ref => {
                 this.camera = ref;
               }}
-              style={styles.preview}
+              style={shared_styles.preview}
               />
               <Button title="Take Photo" onPress={() => {this.takePicture()}}/>
             </View>
@@ -79,26 +80,6 @@ class createreview extends Component {
   
 }
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  formLabel: {
-    fontSize:15,
-    color:'steelblue',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 
 

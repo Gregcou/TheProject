@@ -1,7 +1,7 @@
 import React, {Component } from 'react';
 import { TextInput, Text, View, Button, FlatList, TouchableOpacity, StyleSheet, Image  } from 'react-native';
 import Review from './review';
-
+import { shared_styles } from './Styles/Shared';
 
 class Reviewlist extends Component {
 
@@ -15,15 +15,16 @@ class Reviewlist extends Component {
 
     render(){
 
-        const reviews = this.props.data[0];
-        
+        const reviews = this.props.data.reviewList;
+        let location_reviews={}
         return (
-            <View style={styles.flexContainer}>
+            <View style={shared_styles.flexContainer}>
                 <FlatList
                         data={reviews}
                         renderItem={({item}) => (
                             <View>
-                                <Review data={item}></Review>
+                              <Text>----------------------------------</Text>
+                              <Review data={location_reviews={review: item,location_id: this.props.data.location_id}}></Review>
                             </View>
                         )}
                         keyExtractor={(item,index) => item.review_id.toString()}
@@ -33,24 +34,6 @@ class Reviewlist extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  formLabel: {
-    fontSize:15,
-    color:'steelblue',
-  },
-  pic: {
-    flex: 8
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 
 

@@ -2,6 +2,7 @@ import React, {Component } from 'react';
 import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Reviewlist from './reviewlist';
+import { shared_styles } from './Styles/Shared';
 
 class home extends Component {
 
@@ -40,9 +41,7 @@ class home extends Component {
     }
 
     getData = async () => {
-        console.log("getdata");
         const value = await AsyncStorage.getItem('@session_token');
-        console.log(value);
         return fetch('http://10.0.2.2:3333/api/1.0.0/find',
         {headers: {
             'X-Authorization': value
@@ -55,7 +54,7 @@ class home extends Component {
                 throw 'not logged in';
             }
             else{
-                throw 'wrong'
+                throw 'error'
             }
           })
         .then((responseJson) => {
@@ -86,28 +85,25 @@ class home extends Component {
         else{
             return (
                 <View>
-                    {console.log("vieww")}
                     <FlatList
                         data={this.state.locations}
                         renderItem={({item}) => (
                             <View>
                                 <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={ () => this.props.navigation.navigate("location", {loc_id: item.location_id})}
+                                    style={shared_styles.button}
+                                    onPress={ () => this.props.navigation.navigate("location", {"loc_id": item.location_id})}
                                 >
                                 <Text>{item.location_name}</Text>
                                 <Text>{item.location_town}</Text>
                                 <Image
                                     source={{uri:item.photo_path}}
-                                    style={styles.pic}
+                                    style={shared_styles.pic}
                                 />
                                 </TouchableOpacity>
                             </View>
                         )}
-                        keyExtractor={(item,index) => item.location_id.toString()}
+                        keyExtractor={(item) => item.location_id.toString()}
                     />
-                    {console.log("after flatlist")}
-                    {/* <Button title="log out" onPress={() => this.logOut()}/> */}
                 </View>
             );
         }      
@@ -115,29 +111,6 @@ class home extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  formLabel: {
-    fontSize:15,
-    color:'steelblue',
-  },
-  pic: {
-    flex: 2
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 
 

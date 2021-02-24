@@ -1,127 +1,218 @@
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, PermissionsAndroid, Alert } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import Reviewlist from './reviewlist';
+import Review from './review';
+import { shared_styles } from './Styles/Shared';
+import LocationComponent from './renderComponents/locationComponent';
 
-class profile extends Component {
+class home extends Component {
 
-  constructor(props){
-    super(props);
+    constructor(props){
+        super(props);
 
-    this.state={
-      location: null,
-      locationPermission: false,
-      latlong: {
-        latitude: 0,
-        longitude: 0
+        this.state={
+            isLoading: true,
+            user_info: [],
+            first_name: "",
+            last_name: "",
+            email: "",
+            password: ""
+        }
+    }
+    
+
+    componentDidMount() {
+        this.unsubscribe - this.props.navigation.addListener('focus', () => {
+            this.checkLoggedIn();
+        });
+        this.getData();
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe;
+    }
+
+    checkLoggedIn = async () => {
+        const value = await AsyncStorage.getItem('@session_token');
+        if (value == null) {
+            this.props.navigation.navigate("login");
+        }
+    }
+
+    getData = async () => {
+        console.log("get profile data");
+        const value = await AsyncStorage.getItem('@session_token');
+        const user_id = await AsyncStorage.getItem('@user_id');
+        console.log(value);
+        return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + user_id,
+        {headers: {
+            'X-Authorization': value
+          }},)
+        .then((response)=> {
+            if (response.status === 200){
+                return response.json()
+            }
+            else if(response.status === 401){
+                throw 'Unauthorised';
+            }
+            else if(response.status === 404){
+              throw 'Not found';
+          }
+            else{
+                throw 'error'
+            }
+          })
+        .then((responseJson) => {
+            this.setState({
+                isLoading: false,
+                user_info: responseJson,
+            });
+        })
+        .catch((error) =>{
+            console.log(error);
+        });
+    }
+
+    updateFirst_name = (first_name) => {
+      this.setState({first_name: first_name})
+    }
+  
+    updateLast_name = (last_name) => {
+      this.setState({last_name: last_name})
+    }
+
+    updateEmail = (email) => {
+      this.setState({email: email})
+    }
+  
+    updatePassword = (password) => {
+      this.setState({password: password})
+    }
+
+    updateUserInfo = async () => {
+      if(this.state.first_name == "" && this.state.last_name == "" && this.state.email == "" && this.state.password == ""  ){
+        ToastAndroid.show("No new information entered", ToastAndroid.LONG)
+      }
+      else{
+        userInfoObject={}
+        console.log(this.state.first_name)
+        if(this.state.first_name != ""){
+          userInfoObject['first_name'] = this.state.first_name;
+          console.log("inside if")
+          console.log(this.state.first_name)
+        }
+
+        if(this.state.last_name != ""){
+          userInfoObject['last_name'] = this.state.last_name;
+        }
+        
+        if(this.state.email != ""){
+          userInfoObject['email'] = this.state.email;
+        }
+        
+        if(this.state.password != ""){
+          userInfoObject['password'] = this.state.password;
+        }
+
+        const value = await AsyncStorage.getItem('@session_token');
+        const user_id = await AsyncStorage.getItem('@user_id');
+        return fetch("http://10.0.2.2:3333/api/1.0.0/user/" + user_id, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': value
+          },
+          body: JSON.stringify(userInfoObject)
+        })
+        .then((response)=> {
+          if (response.status === 200){
+            ToastAndroid.show("User information updated", ToastAndroid.SHORT);
+            this.getData();
+          }
+          else if(response.status === 400){
+            throw 'bad request';
+          }
+          else{
+            throw 'wrong'
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          ToastAndroid.show(error, ToastAndroid.SHORT)
+        })
       }
     }
-  }
 
-  componentDidMount(){
-    this.findCoordinates();
-  }
-
-  findCoordinates = () => {
-    this.state.locationPermission = this.requestLocationPermission();
-    if (!this.state.locationPermission){
-      this.state.locationPermission = this.requestLocationPermission();
-    }
-
-
-    Geolocation.getCurrentPosition((position) => {
-        this.setState({ latlong: {
-          longitude: position.coords.longitude,
-          latitude: position.coords.latitude
-        }})
-        console.log(this.state.latlong.latitude);
-    console.log(this.state.latlong.longitude);;
-      },
-      (error) => {
-        Alert.alert(error.message)
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000
-      }    
-    );
-  }
-
-  requestLocationPermission = async () => {
-    try{
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location permission',
-          message: 'This app requires access to your location',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'Ok'
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('you can access location');
-        this.locationPermission = true;
-        return true;
-      }
-      else {
-        console.log('Location permission denied');
-        this.locationPermission = false;
-        return false;
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
+    
 
     render(){
 
         const navigation = this.props.navigation;
-        
-        return (
-            <View style={styles.flexContainer}>
-                <MapView
-                  provider={PROVIDER_GOOGLE}
-                  style={styles.map}
-                  region={{
-                    latitude: this.state.latlong.latitude,
-                    longitude: this.state.latlong.longitude,
-                    latitudeDelta: 0.002,
-                    longitudeDelta: 0.002
-                  }}
-                  >
-                    <Marker
-                      coordinate={this.state.latlong}
-                      title="My location"
-                      description="Here I am"
+        if(this.state.isLoading){
+            return(
+                <View>
+                    <Text>Loading....</Text>
+                    <ActivityIndicator/>
+                </View>
+            );
+        }
+        else{
+          let location_reviews={}
+            return (
+                <View>
+                    <Text>{this.state.user_info.first_name}</Text>
+                    {console.log(this.state.user_info.first_name)}
+                    <Text>{this.state.user_info.last_name}</Text>
+                    <Text>{this.state.user_info.email}</Text>
+                    <Text>Edit details</Text>
+                    <TextInput placeholder="First_name" onChangeText={this.updateFirst_name}/>
+                    <TextInput placeholder="Last_name" onChangeText={this.updateLast_name}/>
+                    <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
+                    <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
+                    <Button title="Log in" onPress={this.updateUserInfo}/>
+                    <Text>Favourite locations</Text>
+                    <FlatList
+                        data={this.state.user_info.favourite_locations}
+                        renderItem={({item}) => (
+                            <View>
+                                <LocationComponent data={item}></LocationComponent>
+                            </View>
+                        )}
+                        keyExtractor={(item) => item.location_id.toString()}
                     />
-                  </MapView>
-            </View>
-        );
+                    <Text>Reviews</Text>
+                    <FlatList
+                        data={this.state.user_info.reviews}
+                        renderItem={({item}) => (
+                            <View>
+                              <Text>----------------------------------</Text>
+                              <Text>{item.location.location_name}</Text>
+                              <Review data={location_reviews={review: item.review,location_id: item.location.location_id}}></Review>
+                            </View>
+                        )}
+                        keyExtractor={(item,index) => item.review.review_id.toString()}
+                    />
+                    <Text>Liked reviews</Text>
+                    <FlatList
+                        data={this.state.user_info.liked_reviews}
+                        renderItem={({item}) => (
+                            <View>
+                              <Text>----------------------------------</Text>
+                              <Text>{item.location.location_name}</Text>
+                              <Review data={location_reviews={review: item.review,location_id: item.location.location_id}}></Review>
+                            </View>
+                        )}
+                        keyExtractor={(item,index) => item.review.review_id.toString()}
+                    />
+                </View>
+            );
+        }      
+        
     }
 }
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  formLabel: {
-    fontSize:15,
-    color:'steelblue',
-  },
-  map: {
-    flex: 1
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 
 
-export default profile;
+export default home;

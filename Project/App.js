@@ -13,6 +13,8 @@ import profile from './components/profile';
 import location from './components/location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reviews from './components/reviews';
+import logout from './components/logout';
+import { shared_styles } from './components/Styles/Shared';
 
 
 
@@ -45,8 +47,9 @@ class HelloWorldApp extends Component {
             <Tabs.Navigator tabBarOptions={{activeTintColor: 'blue', inactiveTintColor: 'grey',labelStyle: {fontSize: 30}}}initialRouteName="login">
               <Tabs.Screen name="login" component={login}></Tabs.Screen>
               <Tabs.Screen name="signup" component={signup}></Tabs.Screen>
-              <Tabs.Screen name="homestack" component={homestack}></Tabs.Screen>
+              <Tabs.Screen name="home" component={homestack}></Tabs.Screen>
               <Tabs.Screen name="profile" component={profile}></Tabs.Screen>
+              <Tabs.Screen name="logout" component={logout}></Tabs.Screen>
             </Tabs.Navigator>
          </NavigationContainer>
       );
@@ -55,32 +58,6 @@ class HelloWorldApp extends Component {
       
     }
 }
-
-const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    flexDirection: 'column-reverse'
-  },
-  formLabel: {
-    fontSize:15,
-    color:'steelblue',
-  },
-  pic: {
-    flex: 8
-  },
-  viewText: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  title: {
-    color:'steelblue',
-    backgroundColor:'lightblue',
-    padding:10,
-    fontSize:25,
-    flex: 1
-  }
-})
 
 
 
