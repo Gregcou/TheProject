@@ -15,6 +15,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import reviews from './components/reviews';
 import logout from './components/logout';
 import { shared_styles } from './components/Styles/Shared';
+import createreview from './components/createreview';
+import editreview from './components/editreview';
 
 
 
@@ -29,6 +31,8 @@ function homestack() {
       <Stack.Screen name="home" component={home} />
       <Stack.Screen name="location" component={location} />
       <Stack.Screen name="reviews" component={reviews} />
+      <Stack.Screen name="createreview" component={createreview} />
+      <Stack.Screen name="editreview" component={editreview} />
     </Stack.Navigator>
   );
 }

@@ -24,7 +24,7 @@ class Reviewlist extends Component {
                         renderItem={({item}) => (
                             <View>
                               <Text>----------------------------------</Text>
-                              <Review data={location_reviews={review: item,location_id: this.props.data.location_id}}></Review>
+                              <Review navigation={this.props.navigation} data={location_reviews={review: item,location_id: this.props.data.location_id}}></Review>
                             </View>
                         )}
                         keyExtractor={(item,index) => item.review_id.toString()}

@@ -25,8 +25,9 @@ class home extends Component {
     componentDidMount() {
         this.unsubscribe - this.props.navigation.addListener('focus', () => {
             this.checkLoggedIn();
+            this.getData();
         });
-        this.getData();
+        
     }
 
     componentWillUnmount() {
@@ -91,6 +92,7 @@ class home extends Component {
     }
 
     updateUserInfo = async () => {
+      console.log("update user info")
       if(this.state.first_name == "" && this.state.last_name == "" && this.state.email == "" && this.state.password == ""  ){
         ToastAndroid.show("No new information entered", ToastAndroid.LONG)
       }
@@ -144,6 +146,7 @@ class home extends Component {
       }
     }
 
+
     
 
     render(){
@@ -158,7 +161,8 @@ class home extends Component {
             );
         }
         else{
-          let location_reviews={}
+          let location_reviews={};
+          let locationInfo={};
             return (
                 <View>
                     <Text>{this.state.user_info.first_name}</Text>
@@ -176,7 +180,7 @@ class home extends Component {
                         data={this.state.user_info.favourite_locations}
                         renderItem={({item}) => (
                             <View>
-                                <LocationComponent data={item}></LocationComponent>
+                                <LocationComponent updateProfileScreen={this.getData} data={locationInfo={onProfilePage: true,location: item}}></LocationComponent>
                             </View>
                         )}
                         keyExtractor={(item) => item.location_id.toString()}

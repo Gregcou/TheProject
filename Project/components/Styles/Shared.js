@@ -18,6 +18,11 @@ const shared_styles = StyleSheet.create({
         backgroundColor: "#DDDDDD",
         padding: 10
       },
+      likedButton: {
+        alignItems: "center",
+        backgroundColor: "#00FF00",
+        padding: 10
+      },
       preview: {
         flex: 1,
         justifyContent: 'flex-end',

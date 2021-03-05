@@ -73,7 +73,6 @@ class home extends Component {
     render(){
 
         const navigation = this.props.navigation;
-        const loc = this.state.locations;
         if(this.state.isLoading){
             return(
                 <View>

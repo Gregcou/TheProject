@@ -50,6 +50,7 @@ class login extends Component {
         console.log(responseJson)
         await AsyncStorage.setItem('@session_token', responseJson.token);
         await AsyncStorage.setItem('@user_id',  responseJson.id.toString());
+        this.getData();
         this.props.navigation.navigate("home")
       })
       .catch((error) => {
@@ -58,6 +59,60 @@ class login extends Component {
       })
     }
   }
+
+  getData = async () => {
+    console.log("get profile data");
+    const value = await AsyncStorage.getItem('@session_token');
+    const user_id = await AsyncStorage.getItem('@user_id');
+    console.log(value);
+    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + user_id,
+    {headers: {
+        'X-Authorization': value
+      }},)
+    .then((response)=> {
+        if (response.status === 200){
+            return response.json()
+        }
+        else if(response.status === 401){
+            throw 'Unauthorised';
+        }
+        else if(response.status === 404){
+          throw 'Not found';
+      }
+        else{
+            throw 'error'
+        }
+      })
+    .then(async (responseJson) => {
+      let userFavourite_locations = [];
+      for (let index = 0; index < responseJson.favourite_locations.length; index++) {
+        userFavourite_locations.push(responseJson.favourite_locations[index].location_id);
+      }
+      console.log(userFavourite_locations);
+      console.log(userFavourite_locations.length);
+      await AsyncStorage.setItem('@userFavourite_locations', JSON.stringify(userFavourite_locations));
+
+      let userReviews = [];
+      for (let index = 0; index < responseJson.reviews.length; index++) {
+        userReviews.push(responseJson.reviews[index].review.review_id);
+      }
+      console.log(userReviews);
+      console.log(userReviews.length);
+      await AsyncStorage.setItem('@userReviews', JSON.stringify(userReviews));
+
+      let userLiked_reviews = [];
+      for (let index = 0; index < responseJson.liked_reviews.length; index++) {
+        userLiked_reviews.push(responseJson.liked_reviews[index].review.review_id);
+      }
+      console.log(userLiked_reviews);
+      console.log(userLiked_reviews.length);
+      await AsyncStorage.setItem('@userLiked_reviews', JSON.stringify(userLiked_reviews));
+      
+    })
+    .catch((error) =>{
+        console.log(error);
+    });
+}
 
     render(){
 
