@@ -34,41 +34,6 @@ class Review extends Component {
       });
     }
 
-    getPhoto = async () => {
-      console.log("getPhoto");
-      const review = this.props.data.review;
-      const value = await AsyncStorage.getItem('@session_token');
-      console.log(value);
-      return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + review.review_id + "/photo", //+ "/photo?timestamp=" + Date.now()
-      {headers: {
-          'X-Authorization': value
-        }},)
-      .then((response)=> {
-          if (response.status === 200 || response.status === 304){
-              return response.blob();
-          }
-          else if(response.status === 404){
-            this.setState({
-              isLoading: false,
-              hasPic: false
-            });
-              throw 'no photo found';
-          }
-          else{
-              throw 'wrong'
-          }
-        })
-      .then(async (responseJson) => {
-        console.log(responseJson);
-          this.setState({
-              isLoading: false,
-              hasPic: true
-          });
-      })
-      .catch((error) =>{
-          console.log(error);
-      });
-    }
 
     likeReview = async () => {
       console.log("LIKE");
@@ -191,7 +156,7 @@ class Review extends Component {
                
                 
                 <Image
-                  source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + this.props.data.review.review_id + "/photo"}}
+                  source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + this.props.data.review.review_id + "/photo?timestamp=" + Date.now()}}
                   style={shared_styles.pic}
                   onError={this.onErrorGettingImage}
                 />

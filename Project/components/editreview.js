@@ -45,7 +45,7 @@ class editreview extends Component {
       console.log(data.uri);
       const value = await AsyncStorage.getItem('@session_token');
       console.log(value);
-      return fetch("http://10.0.2.2:3333/api/1.0.0/location/1/review/8/photo", {
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/" + this.state.loc_id + "/review/" +  this.state.review.review_id + "/photo", {
         method: 'POST',
         headers: {
           'Content-Type': 'image/jpeg',
@@ -174,6 +174,32 @@ class editreview extends Component {
           })
         }
 
+        deleteReviewPhoto = async () => {
+            console.log("delete function");
+            const value = await AsyncStorage.getItem('@session_token');
+            return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.loc_id + "/review/" + this.state.review.review_id + "/photo", {
+                method: 'delete',
+                headers: {
+                    'X-Authorization': value
+                },
+              })
+              .then((response)=> {
+                if (response.status === 200){
+                    ToastAndroid.show("Photo Deleted", ToastAndroid.SHORT)
+                }
+                else if(response.status === 401){
+                  throw 'Error deleting photo';
+                }
+                else{
+                  throw 'error'
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+                ToastAndroid.show(error, ToastAndroid.SHORT)
+              })
+            }
+
     render(){
 
         const navigation = this.props.navigation;
@@ -192,13 +218,14 @@ class editreview extends Component {
               <Text style={shared_styles.formLabel}>Review Body: </Text>
               <TextInput value={this.state.review_body}  onChangeText={this.updateReview_body}/>
               <Button title="Edit Review" onPress={() => {this.editeReview()}}/>
-              <Button title="Delete" onPress={() => {this.deleteReview()}}/>
-              {/* <RNCamera ref={ref => {
+              <Button title="Delete Review" onPress={() => {this.deleteReview()}}/>
+              <RNCamera ref={ref => {
                 this.camera = ref;
               }}
               style={shared_styles.preview}
               />
-              <Button title="Take Photo" onPress={() => {this.takePicture()}}/> */}
+              <Button title="Take Photo" onPress={() => {this.takePicture()}}/>
+              <Button title="Delete Review Photo" onPress={() => {this.deleteReviewPhoto()}}/>
             </View>
         );
     }

@@ -18,10 +18,14 @@ class location extends Component {
 
   componentDidMount() {
     this.unsubscribe - this.props.navigation.addListener('focus', () => {
-      this.getData();
+      console.log("Before get user reviews");
       this.getUserReviews();
+      console.log("After get user reviews");
+
+      console.log("After listener get data");
     });
-    this.getData();
+    console.log("Before get data in mount");
+    //this.getData();
   }
 
 
@@ -84,7 +88,9 @@ getUserReviews = async () => {
     for (let index = 0; index < responseJson.reviews.length; index++) {
       userReviews.push(responseJson.reviews[index].review.review_id);
     }
+    console.log(userReviews);
     await AsyncStorage.setItem('@userReviews', JSON.stringify(userReviews));
+    this.getData();
   })
   .catch((error) =>{
       console.log(error);
