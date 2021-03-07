@@ -168,12 +168,12 @@ class Review extends Component {
         else{
           return (
             <View style={shared_styles.reviewFlexContainer}>
-                <Text style={shared_styles.formLabel}>overall rating{review.overall_rating} </Text>
-                <Text style={shared_styles.formLabel}>price {review.price_rating}</Text>
-                <Text style={shared_styles.formLabel}>quality {review.quality_rating}</Text>
-                <Text style={shared_styles.formLabel}>cleanliness {review.clenliness_rating}</Text>
-                <Text style={shared_styles.formLabel}>{review.review_body}</Text>
-                <Text style={shared_styles.formLabel}>{review.likes} likes</Text>
+                <Text style={shared_styles.regularText}>overall rating{review.overall_rating} </Text>
+                <Text style={shared_styles.regularText}>price {review.price_rating}</Text>
+                <Text style={shared_styles.regularText}>quality {review.quality_rating}</Text>
+                <Text style={shared_styles.regularText}>cleanliness {review.clenliness_rating}</Text>
+                <Text style={shared_styles.regularText}>{review.review_body}</Text>
+                <Text style={shared_styles.regularText}>{review.likes} likes</Text>
                
                 {this.state.hasPic ? (
                   <Image

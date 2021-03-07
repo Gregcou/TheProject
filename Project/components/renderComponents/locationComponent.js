@@ -119,12 +119,12 @@ class LocationComponent extends Component {
         const location_reviews={reviewList: location.location_reviews,location_id: location.location_id}
         return (
             <View style={shared_styles.flexContainer}>
-                <Text style={shared_styles.formLabel}>{location.location_name}</Text>
-                <Text style={shared_styles.formLabel}>{location.location_town}</Text>
-                <Text style={shared_styles.formLabel}>Average overall rating: {location.avg_overall_rating} </Text>
-                <Text style={shared_styles.formLabel}>Average price rating: {location.avg_price_rating}</Text>
-                <Text style={shared_styles.formLabel}>Average quality rating: {location.avg_quality_rating}</Text>
-                <Text style={shared_styles.formLabel}>Average clenliness rating: {location.avg_clenliness_rating}</Text>
+                <Text style={shared_styles.regularText}>{location.location_name}</Text>
+                <Text style={shared_styles.regularText}>{location.location_town}</Text>
+                <Text style={shared_styles.regularText}>Average overall rating: {location.avg_overall_rating} </Text>
+                <Text style={shared_styles.regularText}>Average price rating: {location.avg_price_rating}</Text>
+                <Text style={shared_styles.regularText}>Average quality rating: {location.avg_quality_rating}</Text>
+                <Text style={shared_styles.regularText}>Average clenliness rating: {location.avg_clenliness_rating}</Text>
                 {this.state.userFavourite_locations.includes(location.location_id) ? (
                   <TouchableOpacity
                   style={shared_styles.likedButton}
@@ -144,7 +144,7 @@ class LocationComponent extends Component {
                 {this.props.data.onProfilePage ? (
                     <View></View>
                 ) : (
-                    <Reviewlist navigation={this.props.navigation} data={location_reviews}></Reviewlist>
+                    <Reviewlist style={shared_styles.reviewList} navigation={this.props.navigation} data={location_reviews}></Reviewlist>
                 )
                 }
                 

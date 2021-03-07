@@ -13,30 +13,34 @@ const shared_styles = StyleSheet.create({
         borderRadius: 6,
         margin: 3
       },
-      formLabel: {
+      regularText: {
         fontSize:18,
         color:'black',
+        //flex: 1
       },
       subTitleText: {
         fontSize:22,
         color:'black',
+        //flex: 3
       },
       pic: {
-        height: null,
-        width: null,
+        height: 159,
+        width: 200,
         resizeMode: 'contain',
-        flex: 1,
+        flex: 4,
         alignSelf: "center"
       },
       button: {
         alignItems: "center",
         backgroundColor: "#DDDDDD",
-        padding: 10
+        padding: 10,
+        //flex: 1
       },
       likedButton: {
         alignItems: "center",
         backgroundColor: "#00FF00",
-        padding: 10
+        padding: 10,
+        //flex: 1
       },
       preview: {
         flex: 1,
@@ -54,6 +58,9 @@ const shared_styles = StyleSheet.create({
         flex: 4,
         justifyContent: 'center',
         alignItems: 'center'
+      },
+      reviewList: {
+        flex: 10,
       }
 });
 

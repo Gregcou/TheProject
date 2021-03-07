@@ -22,7 +22,7 @@ class Reviewlist extends Component {
                 <FlatList
                         data={reviews}
                         renderItem={({item}) => (
-                            <View>
+                            <View style={shared_styles.reviewList}>
                               <Review navigation={this.props.navigation} data={location_reviews={review: item,location_id: this.props.data.location_id}}></Review>
                             </View>
                         )}

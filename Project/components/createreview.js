@@ -39,6 +39,9 @@ class createreview extends Component {
       if(this.state.overall_rating == null || this.state.price_rating == null || this.state.quality_rating == null || this.state.clenliness_rating == null || this.state.review_body == "" ){
         ToastAndroid.show("Enter all ratings and review body", ToastAndroid.SHORT)
       }
+      else if(this.state.review_body.toLowerCase().includes("tea") || this.state.review_body.toLowerCase().includes("cake") || this.state.review_body.toLowerCase().includes("pastry") || this.state.review_body.toLowerCase().includes("pastries")){
+        ToastAndroid.show("Please do not mention tea, cakes or pastries in your review", ToastAndroid.SHORT)
+      }
       else{
         const {loc_id} = this.props.route.params;
         const value = await AsyncStorage.getItem('@session_token');
@@ -110,15 +113,15 @@ class createreview extends Component {
         
         return (
             <View style={shared_styles.flexContainer}>
-              <Text style={shared_styles.formLabel}>Overall Rating: </Text>
+              <Text style={shared_styles.regularText}>Overall Rating: </Text>
               <TextInput placeholder="0" maxLength={1} onChangeText={this.updateOverall_rating}/>
-              <Text style={shared_styles.formLabel}>Price Rating: </Text>
+              <Text style={shared_styles.regularText}>Price Rating: </Text>
               <TextInput placeholder="0" maxLength={1} onChangeText={this.updateprice_rating}/>
-              <Text style={shared_styles.formLabel}>Quality Rating: </Text>
+              <Text style={shared_styles.regularText}>Quality Rating: </Text>
               <TextInput placeholder="0" maxLength={1} onChangeText={this.updateQuality_rating}/>
-              <Text style={shared_styles.formLabel}>Cleanliness Rating: </Text>
+              <Text style={shared_styles.regularText}>Cleanliness Rating: </Text>
               <TextInput placeholder="0" maxLength={1} onChangeText={this.updateClenliness_rating}/>
-              <Text style={shared_styles.formLabel}>Review Body: </Text>
+              <Text style={shared_styles.regularText}>Review Body: </Text>
               <TextInput placeholder="..."  onChangeText={this.updateReview_body}/>
               <Button title="Create Review" onPress={() => {this.createReview()}}/>
             </View>

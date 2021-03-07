@@ -123,7 +123,7 @@ getUserReviews = async () => {
     else{
       let locationInfo={}
       return (
-        <View style={shared_styles.flexContainer}>
+        <View style={shared_styles.reviewList}>
           <Button title="Create Review" onPress={ () => this.props.navigation.navigate("createreview", {"loc_id": this.state.location.location_id})}></Button>
           <LocationComponent navigation={this.props.navigation} data={locationInfo={onProfilePage: false,location: this.state.location}}></LocationComponent>
         </View>

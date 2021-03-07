@@ -59,7 +59,7 @@ class logout extends Component {
         const navigation = this.props.navigation;
         return (
             <View style={shared_styles.flexContainer}>
-                <Text style={shared_styles.formLabel}>Logout</Text>
+                <Text style={shared_styles.regularText}>Logout</Text>
                 <Button title="Logout" onPress={this.logout}/>
             </View>
         );

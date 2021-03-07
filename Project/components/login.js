@@ -27,6 +27,9 @@ class login extends Component {
     if(this.state.email == "" || this.state.password == "" ){
       ToastAndroid.show("Both an email and password are needed to login", ToastAndroid.LONG)
     }
+    else if(!this.state.email.includes("@")){
+      ToastAndroid.show("Please use a valid email address", ToastAndroid.LONG)
+    }
     else{
       return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
         method: 'post',
@@ -121,7 +124,7 @@ class login extends Component {
             <View style={shared_styles.flexContainer}>
                 <Text style={shared_styles.subTitleText}>Login</Text>
                 <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
-                <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
+                <TextInput maxLength={14} secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
                 <Button title="Log in" onPress={this.login}/>
             </View>
         );

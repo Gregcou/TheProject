@@ -101,9 +101,12 @@ class editreview extends Component {
       }
     }
 
-    editeReview =  async () => {
+    updateReview =  async () => {
       if(this.state.overall_rating == null && this.state.price_rating == null && this.state.quality_rating == null && this.state.clenliness_rating == null && this.state.review_body == "" ){
         ToastAndroid.show("Please enter at least one value to be edited", ToastAndroid.SHORT)
+      }
+      else if(this.state.review_body.toLowerCase().includes("tea") || this.state.review_body.toLowerCase().includes("cake") || this.state.review_body.toLowerCase().includes("pastry") || this.state.review_body.toLowerCase().includes("pastries")){
+        ToastAndroid.show("Please do not mention tea, cakes or pastries in your review", ToastAndroid.SHORT)
       }
       else{
         reviewInfoObject={}
@@ -244,18 +247,18 @@ class editreview extends Component {
         
         return (
             <View style={shared_styles.flexContainer}>
-            <Text style={shared_styles.formLabel}>{this.state.review.review_id} </Text>
-              <Text style={shared_styles.formLabel}>Overall Rating: </Text>
+            <Text style={shared_styles.regularText}>{this.state.review.review_id} </Text>
+              <Text style={shared_styles.regularText}>Overall Rating: </Text>
               <TextInput value={this.state.overall_rating.toString()} maxLength={1} onChangeText={this.updateOverall_rating}/>
-              <Text style={shared_styles.formLabel}>Price Rating: </Text>
+              <Text style={shared_styles.regularText}>Price Rating: </Text>
               <TextInput value={this.state.price_rating.toString()} maxLength={1} onChangeText={this.updateprice_rating}/>
-              <Text style={shared_styles.formLabel}>Quality Rating: </Text>
+              <Text style={shared_styles.regularText}>Quality Rating: </Text>
               <TextInput value={this.state.quality_rating.toString()} maxLength={1} onChangeText={this.updateQuality_rating}/>
-              <Text style={shared_styles.formLabel}>Cleanliness Rating: </Text>
+              <Text style={shared_styles.regularText}>Cleanliness Rating: </Text>
               <TextInput value={this.state.clenliness_rating.toString()} maxLength={1} onChangeText={this.updateClenliness_rating}/>
-              <Text style={shared_styles.formLabel}>Review Body: </Text>
+              <Text style={shared_styles.regularText}>Review Body: </Text>
               <TextInput value={this.state.review_body}  onChangeText={this.updateReview_body}/>
-              <Button title="Edit Review" onPress={() => {this.editeReview()}}/>
+              <Button title="Edit Review" onPress={() => {this.updateReview()}}/>
               <Button title="Delete Review" onPress={() => {this.deleteReview()}}/>
               <RNCamera ref={ref => {
                 this.camera = ref;

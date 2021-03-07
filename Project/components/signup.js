@@ -37,6 +37,9 @@ class signup extends Component {
     if(this.state.first_name == "" || this.state.last_name == "" || this.state.email == "" || this.state.password == "" ){
       ToastAndroid.show("Enter first name, last name, email and password", ToastAndroid.SHORT)
     }
+    else if(!this.state.email.includes("@")){
+      ToastAndroid.show("Please use a valid email address", ToastAndroid.LONG)
+    }
     else{
       let to_send = {
         first_name: this.state.first_name,
@@ -82,11 +85,11 @@ class signup extends Component {
 
         return (
           <View style={shared_styles.flexContainer}>
-              <Text style={shared_styles.formLabel}>sign up</Text>
+              <Text style={shared_styles.regularText}>sign up</Text>
               <TextInput placeholder="first name" onChangeText={this.updatefirst_name} value={this.state.first_name}/>
               <TextInput placeholder="last name" onChangeText={this.updatelast_name} value={this.state.last_name}/>
               <TextInput placeholder="email address" onChangeText={this.updateEmail} value={this.state.email}/>
-              <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword} value={this.state.password}/>
+              <TextInput maxLength={14} secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword} value={this.state.password}/>
               <Button title="Sign Up" onPress={this.signUp}/>
           </View>
         );
