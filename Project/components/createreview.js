@@ -20,6 +20,20 @@ class createreview extends Component {
     }
   }
 
+  componentDidMount() {
+    this.unsubscribe - this.props.navigation.addListener('focus', () => {
+        this.checkLoggedIn();
+    });
+  }
+
+
+  checkLoggedIn = async () => {
+    const value = await AsyncStorage.getItem('@session_token');
+    if (value == null) {
+        this.props.navigation.navigate("login");
+    }
+  }
+
 
     createReview =  async () => {
       if(this.state.overall_rating == null || this.state.price_rating == null || this.state.quality_rating == null || this.state.clenliness_rating == null || this.state.review_body == "" ){
@@ -51,8 +65,14 @@ class createreview extends Component {
           else if(response.status === 400){
             throw 'Bad request';
           }
+          else if(response.status === 401){
+            throw 'Must be logged in';
+          }
+          else if(response.status === 404){
+            throw 'Review not found';
+          }
           else{
-            throw 'wrong'
+            throw 'Server error'
           }
         })
         .catch((error) => {

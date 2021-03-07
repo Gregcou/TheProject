@@ -1,5 +1,5 @@
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator  } from 'react-native';
+import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Reviewlist from './reviewlist';
 import { shared_styles } from './Styles/Shared';
@@ -34,12 +34,6 @@ class home extends Component {
         }
     }
 
-    logOut = () =>{
-        console.log("logout function");
-        AsyncStorage.removeItem('@session_token');
-        this.checkLoggedIn()
-    }
-
     getData = async () => {
         const value = await AsyncStorage.getItem('@session_token');
         return fetch('http://10.0.2.2:3333/api/1.0.0/find',
@@ -50,11 +44,14 @@ class home extends Component {
             if (response.status === 200){
                 return response.json()
             }
+            else if(response.status === 400){
+                throw 'Bad request';
+            }
             else if(response.status === 401){
-                throw 'not logged in';
+                throw 'Must be logged in';
             }
             else{
-                throw 'error'
+                throw 'Server error'
             }
           })
         .then((responseJson) => {
@@ -65,6 +62,7 @@ class home extends Component {
         })
         .catch((error) =>{
             console.log(error);
+            ToastAndroid.show(error, ToastAndroid.SHORT)
         });
     }
 
@@ -92,8 +90,8 @@ class home extends Component {
                                     style={shared_styles.button}
                                     onPress={ () => this.props.navigation.navigate("location", {"loc_id": item.location_id})}
                                 >
-                                <Text>{item.location_name}</Text>
-                                <Text>{item.location_town}</Text>
+                                <Text style={shared_styles.subTitleText}>{item.location_name}</Text>
+                                <Text style={shared_styles.subTitleText}>{item.location_town}</Text>
                                 <Image
                                     source={{uri:item.photo_path}}
                                     style={shared_styles.pic}

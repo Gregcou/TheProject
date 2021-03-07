@@ -55,11 +55,17 @@ class Review extends Component {
               await AsyncStorage.setItem('@userLiked_reviews', JSON.stringify(this.state.userLiked_reviews));
               console.log(this.state.userLiked_reviews);
           }
-          else if(response.status === 400 || response.status === 401 || response.status === 404 || response.status === 500){
+          else if(response.status === 400){
             throw 'error liking review';
           }
+          else if(response.status === 401){
+            throw 'Must be logged in';
+          }
+          else if(response.status === 404){
+            throw 'Review not found';
+          }
           else{
-            throw 'error'
+            throw 'Server error'
           }
         })
         .catch((error) => {
@@ -90,11 +96,17 @@ class Review extends Component {
                 await AsyncStorage.setItem('@userLiked_reviews', JSON.stringify(this.state.userLiked_reviews));
                 console.log(this.state.userLiked_reviews);
             }
-            else if(response.status === 400 || response.status === 401 || response.status === 404 || response.status === 500){
-              throw 'error liking review';
+            else if(response.status === 401){
+              throw 'Must be logged in';
+            }
+            else if(response.status === 403){
+              throw 'Forbidden';
+            }
+            else if(response.status === 404){
+              throw 'Not found';
             }
             else{
-              throw 'error'
+              throw 'Server error'
             }
           })
           .catch((error) => {
@@ -121,11 +133,20 @@ class Review extends Component {
             if (response.status === 200){
                 ToastAndroid.show("Review Deleted", ToastAndroid.SHORT)
             }
+            else if(response.status === 400){
+              throw 'Bad request';
+            }
             else if(response.status === 401){
-              throw 'Unauthorised logout';
+              throw 'Must be logged in';
+            }
+            else if(response.status === 403){
+              throw 'Forbidden';
+            }
+            else if(response.status === 404){
+              throw 'Not found';
             }
             else{
-              throw 'error'
+              throw 'Server error'
             }
           })
           .catch((error) => {
@@ -146,7 +167,7 @@ class Review extends Component {
         }
         else{
           return (
-            <View style={shared_styles.flexContainer}>
+            <View style={shared_styles.reviewFlexContainer}>
                 <Text style={shared_styles.formLabel}>overall rating{review.overall_rating} </Text>
                 <Text style={shared_styles.formLabel}>price {review.price_rating}</Text>
                 <Text style={shared_styles.formLabel}>quality {review.quality_rating}</Text>
@@ -154,25 +175,31 @@ class Review extends Component {
                 <Text style={shared_styles.formLabel}>{review.review_body}</Text>
                 <Text style={shared_styles.formLabel}>{review.likes} likes</Text>
                
-                
-                <Image
-                  source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + this.props.data.review.review_id + "/photo?timestamp=" + Date.now()}}
-                  style={shared_styles.pic}
-                  onError={this.onErrorGettingImage}
-                />
+                {this.state.hasPic ? (
+                  <Image
+                    source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + this.props.data.review.review_id + "/photo?timestamp=" + Date.now()}}
+                    style={shared_styles.pic}
+                    onError={this.onErrorGettingImage}
+                  />
+                ) : (
+                  <View></View>
+                )
+                }
+
+
                 {this.state.userLiked_reviews.includes(review.review_id) ? (
                   <TouchableOpacity
                   style={shared_styles.likedButton}
                   onPress={ () => this.removeLikeReview()}
                   >
-                  <Text>LIKED</Text>
+                  <Text style={shared_styles.subTitleText}>LIKED</Text>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                   style={shared_styles.button}
                   onPress={ () => this.likeReview()}
                   >
-                  <Text>LIKE</Text>
+                  <Text style={shared_styles.subTitleText}>LIKE</Text>
                   </TouchableOpacity>
                 )
                 }
@@ -182,26 +209,12 @@ class Review extends Component {
                   style={shared_styles.likedButton}
                   onPress={ () => this.props.navigation.navigate("editreview", {"loc_id": this.props.data.location_id,"review": review})}
                   >
-                  <Text>EDIT REVIEW</Text>
+                  <Text style={shared_styles.subTitleText}>EDIT REVIEW</Text>
                   </TouchableOpacity>
                 ) : (
                   <View></View>
                 )
                 }
-
-
-                
-                
-                {/* {this.state.hasPic ? (
-                  <Image
-                  source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + this.props.data.review.review_id + "/photo"}}
-                  style={shared_styles.pic}
-                  onError={this.onErrorGettingImage}
-                  />
-                ) : (
-                  <View></View>
-                )
-                } */}
                 
             </View>
         );

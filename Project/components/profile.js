@@ -55,13 +55,13 @@ class home extends Component {
                 return response.json()
             }
             else if(response.status === 401){
-                throw 'Unauthorised';
+                throw 'Must be logged in';
             }
             else if(response.status === 404){
-              throw 'Not found';
+              throw 'User not found';
           }
             else{
-                throw 'error'
+                throw 'Server error'
             }
           })
         .then((responseJson) => {
@@ -135,8 +135,17 @@ class home extends Component {
           else if(response.status === 400){
             throw 'bad request';
           }
+          else if(response.status === 401){
+            throw 'Must be logged in';
+          }
+          else if(response.status === 403){
+            throw 'Forbidden';
+          }
+          else if(response.status === 404){
+            throw 'User not found';
+          }
           else{
-            throw 'wrong'
+            throw 'Server error'
           }
         })
         .catch((error) => {

@@ -43,7 +43,7 @@ class login extends Component {
           throw 'Incorrect email or password';
         }
         else{
-          throw 'wrong'
+          throw 'Server error'
         }
       })
       .then(async (responseJson)=>{
@@ -80,7 +80,7 @@ class login extends Component {
           throw 'Not found';
       }
         else{
-            throw 'error'
+            throw 'Server error'
         }
       })
     .then(async (responseJson) => {
@@ -119,7 +119,7 @@ class login extends Component {
         const navigation = this.props.navigation;
         return (
             <View style={shared_styles.flexContainer}>
-                <Text style={shared_styles.formLabel}>Login</Text>
+                <Text style={shared_styles.subTitleText}>Login</Text>
                 <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
                 <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
                 <Button title="Log in" onPress={this.login}/>

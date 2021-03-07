@@ -57,10 +57,10 @@ class signup extends Component {
           return response.json()
         }
         else if(response.status === 400){
-          throw 'fv';
+          throw 'Bad request';
         }
         else{
-          throw 'wrong'
+          throw 'Server error'
         }
       })
       .then((responseJson)=>{

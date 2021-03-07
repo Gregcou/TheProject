@@ -23,7 +23,6 @@ class Reviewlist extends Component {
                         data={reviews}
                         renderItem={({item}) => (
                             <View>
-                              <Text>----------------------------------</Text>
                               <Review navigation={this.props.navigation} data={location_reviews={review: item,location_id: this.props.data.location_id}}></Review>
                             </View>
                         )}

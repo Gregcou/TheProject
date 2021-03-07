@@ -10,6 +10,20 @@ class logout extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.unsubscribe - this.props.navigation.addListener('focus', () => {
+        this.checkLoggedIn();
+    });
+  }
+
+
+  checkLoggedIn = async () => {
+    const value = await AsyncStorage.getItem('@session_token');
+    if (value == null) {
+        this.props.navigation.navigate("login");
+    }
+  }
+
 
 
   logout = async () => {
@@ -28,10 +42,10 @@ class logout extends Component {
             this.props.navigation.navigate("login")
         }
         else if(response.status === 401){
-          throw 'Unauthorised logout';
+          throw 'Must be logged in to log out';
         }
         else{
-          throw 'error'
+          throw 'Server error'
         }
       })
       .catch((error) => {

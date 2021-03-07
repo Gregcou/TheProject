@@ -12,15 +12,6 @@ class editreview extends Component {
 
 
     const {loc_id, review} = this.props.route.params;
-    // this.state.loc_id = JSON.stringify(loc_id);
-    // this.state.review = review;
-    // console.log(typeof review);
-    // console.log(this.state.review);
-    // this.state.overall_rating = review.overall_rating;
-    // this.state.price_rating = review.price_rating;
-    // this.state.quality_rating = review.quality_rating;
-    // this.state.clenliness_rating = review.clenliness_rating;
-    // this.state.review_body = review.review_body;
 
     this.state={
       overall_rating: review.overall_rating,
@@ -34,9 +25,18 @@ class editreview extends Component {
   }
 
   componentDidMount() {
-    
-    }
+    this.unsubscribe - this.props.navigation.addListener('focus', () => {
+        this.checkLoggedIn();
+    });
+  }
 
+
+  checkLoggedIn = async () => {
+    const value = await AsyncStorage.getItem('@session_token');
+    if (value == null) {
+        this.props.navigation.navigate("login");
+    }
+  }
   takePicture = async() => {
     this.requestCameraPermission();
     if (this.camera) {
@@ -54,7 +54,21 @@ class editreview extends Component {
         body: data
       })
       .then((response)=> {
-        Alert.alert("Picture Added!");
+        if (response.status === 200){
+          ToastAndroid.show("Picture posted", ToastAndroid.SHORT);
+        }
+        else if(response.status === 400){
+          throw 'Bad request';
+        }
+        else if(response.status === 401){
+          throw 'Must be logged in';
+        }
+        else if(response.status === 404){
+          throw 'Review not found';
+        }
+        else{
+          throw 'Server error'
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -114,8 +128,17 @@ class editreview extends Component {
           else if(response.status === 400){
             throw 'Bad request';
           }
+          else if(response.status === 401){
+            throw 'Must be logged in';
+          }
+          else if(response.status === 403){
+            throw 'Forbidden';
+          }
+          else if(response.status === 404){
+            throw 'Review not found';
+          }
           else{
-            throw 'wrong'
+            throw 'Server error'
           }
         })
         .catch((error) => {
@@ -161,11 +184,20 @@ class editreview extends Component {
                 ToastAndroid.show("Review Deleted", ToastAndroid.SHORT)
                 this.props.navigation.goBack();
             }
+            else if(response.status === 400){
+              throw 'Bad request';
+            }
             else if(response.status === 401){
-              throw 'Unauthorised logout';
+              throw 'Must be logged in';
+            }
+            else if(response.status === 403){
+              throw 'Forbidden';
+            }
+            else if(response.status === 404){
+              throw 'Review not found';
             }
             else{
-              throw 'error'
+              throw 'Server error'
             }
           })
           .catch((error) => {
@@ -188,10 +220,16 @@ class editreview extends Component {
                     ToastAndroid.show("Photo Deleted", ToastAndroid.SHORT)
                 }
                 else if(response.status === 401){
-                  throw 'Error deleting photo';
+                  throw 'Must be logged in';
+                }
+                else if(response.status === 403){
+                  throw 'Forbidden';
+                }
+                else if(response.status === 404){
+                  throw 'Review not found';
                 }
                 else{
-                  throw 'error'
+                  throw 'Server error'
                 }
               })
               .catch((error) => {

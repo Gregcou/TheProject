@@ -5,13 +5,28 @@ const shared_styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column'
       },
+      reviewFlexContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        borderWidth: 4,
+        borderColor: "#20232a",
+        borderRadius: 6,
+        margin: 3
+      },
       formLabel: {
-        fontSize:15,
-        color:'steelblue',
+        fontSize:18,
+        color:'black',
+      },
+      subTitleText: {
+        fontSize:22,
+        color:'black',
       },
       pic: {
-        height: 100,
-        width: 100
+        height: null,
+        width: null,
+        resizeMode: 'contain',
+        flex: 1,
+        alignSelf: "center"
       },
       button: {
         alignItems: "center",

@@ -49,11 +49,17 @@ class LocationComponent extends Component {
                 await AsyncStorage.setItem('@userFavourite_locations', JSON.stringify(this.state.userFavourite_locations));
                 console.log(this.state.userFavourite_locations);
             }
-            else if(response.status === 400 || response.status === 401 || response.status === 404 || response.status === 500){
+            else if(response.status === 400){
               throw 'error favouriting location';
             }
+            else if(response.status === 401){
+              throw 'Must be logged in';
+            }
+            else if(response.status === 404){
+              throw 'Not found';
+            }
             else{
-              throw 'error'
+              throw 'Server error'
             }
           })
           .catch((error) => {
@@ -87,13 +93,18 @@ class LocationComponent extends Component {
                     console.log("updateProfileScreen")
                     this.props.updateProfileScreen();
                   }
-                  
               }
-              else if(response.status === 400 || response.status === 401 || response.status === 404 || response.status === 500){
-                throw 'error removing favourite';
+              else if(response.status === 401){
+                throw 'Must be logged in';
+              }
+              else if(response.status === 403){
+                throw 'Forbidden';
+              }
+              else if(response.status === 404){
+                throw 'Not found';
               }
               else{
-                throw 'error'
+                throw 'Server error'
               }
             })
             .catch((error) => {
@@ -119,14 +130,14 @@ class LocationComponent extends Component {
                   style={shared_styles.likedButton}
                   onPress={ () => this.removeFavouriteLocatation()}
                   >
-                  <Text>FAVOURITED</Text>
+                  <Text style={shared_styles.subTitleText}>FAVOURITED</Text>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                   style={shared_styles.button}
                   onPress={ () => this.favouriteLocation()}
                   >
-                  <Text>FAVOURITE</Text>
+                  <Text style={shared_styles.subTitleText}>FAVOURITE</Text>
                   </TouchableOpacity>
                 )
                 }

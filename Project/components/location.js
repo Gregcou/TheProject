@@ -1,5 +1,5 @@
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ActivityIndicator  } from 'react-native';
+import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ActivityIndicator, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocationComponent from './renderComponents/locationComponent';
 import { shared_styles } from './Styles/Shared';
@@ -18,14 +18,16 @@ class location extends Component {
 
   componentDidMount() {
     this.unsubscribe - this.props.navigation.addListener('focus', () => {
-      console.log("Before get user reviews");
+      this.checkLoggedIn();
       this.getUserReviews();
-      console.log("After get user reviews");
-
-      console.log("After listener get data");
     });
-    console.log("Before get data in mount");
-    //this.getData();
+  }
+
+  checkLoggedIn = async () => {
+    const value = await AsyncStorage.getItem('@session_token');
+    if (value == null) {
+        this.props.navigation.navigate("login");
+    }
   }
 
 
@@ -42,11 +44,11 @@ class location extends Component {
         if (response.status === 200){
             return response.json()
         }
-        else if(response.status === 401){
-            throw 'not logged in';
+        else if(response.status === 404){
+            throw 'Location not fund';
         }
         else{
-            throw 'wrong'
+            throw 'Server error'
         }
       })
     .then(async (responseJson) => {
@@ -57,6 +59,7 @@ class location extends Component {
     })
     .catch((error) =>{
         console.log(error);
+        ToastAndroid.show(error, ToastAndroid.SHORT)
     });
 }
 
@@ -73,14 +76,20 @@ getUserReviews = async () => {
       if (response.status === 200){
           return response.json()
       }
+      else if(response.status === 400){
+        throw 'bad request';
+      }
       else if(response.status === 401){
-          throw 'Unauthorised';
+        throw 'Must be logged in';
+      }
+      else if(response.status === 403){
+        throw 'Forbidden';
       }
       else if(response.status === 404){
-        throw 'Not found';
-    }
+        throw 'User not found';
+      }
       else{
-          throw 'error'
+          throw 'Server error'
       }
     })
   .then(async (responseJson) => {
@@ -94,6 +103,7 @@ getUserReviews = async () => {
   })
   .catch((error) =>{
       console.log(error);
+      ToastAndroid.show(error, ToastAndroid.SHORT)
   });
 }
 
