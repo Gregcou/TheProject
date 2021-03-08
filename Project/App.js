@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -41,12 +42,12 @@ class HelloWorldApp extends Component {
       
       return (
         <NavigationContainer>
-            <Tabs.Navigator tabBarOptions={{activeTintColor: 'blue', inactiveTintColor: 'grey',labelStyle: {fontSize: 30}}}initialRouteName="login">
-              <Tabs.Screen name="login" component={login}></Tabs.Screen>
-              <Tabs.Screen name="signup" component={signup}></Tabs.Screen>
-              <Tabs.Screen name="home" component={homestack}></Tabs.Screen>
-              <Tabs.Screen name="profile" component={profile}></Tabs.Screen>
-              <Tabs.Screen name="logout" component={logout}></Tabs.Screen>
+            <Tabs.Navigator tabBarOptions={{activeTintColor: 'blue', inactiveTintColor: 'grey',labelStyle: {fontSize: 20}}}initialRouteName="login">
+              <Tabs.Screen name="login" component={login} />
+              <Tabs.Screen name="signup" component={signup} />
+              <Tabs.Screen name="home" component={homestack} />
+              <Tabs.Screen name="profile" component={profile} />
+              <Tabs.Screen name="logout" component={logout} />
             </Tabs.Navigator>
          </NavigationContainer>
       );

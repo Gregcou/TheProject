@@ -16,8 +16,7 @@ class home extends Component {
 
         this.state={
             isLoading: true,
-            locations: [],
-            hasPic: true
+            locations: []
         }
     }
     
@@ -71,10 +70,6 @@ class home extends Component {
         });
     }
 
-    onErrorGettingImage = () => {
-        this.setState({hasPic: false})
-      }
-
     
 
     render(){
@@ -100,17 +95,6 @@ class home extends Component {
                                 >
                                 <Text style={sharedStyles.subTitleText}>{item.location_name}</Text>
                                 <Text style={sharedStyles.subTitleText}>{item.location_town}</Text>
-                                {this.state.hasPic ? (
-                                <Image
-                                source={{uri:item.photo_path}}
-                                    style={sharedStyles.pic}
-                                    onError={this.onErrorGettingImage}
-                                    alt="Location image"
-                                />
-                                ) : (
-                                <View />
-                                )
-                                }
                                 </TouchableOpacity>
                             </View>
                         )}

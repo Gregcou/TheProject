@@ -1,0 +1,21 @@
+Greg coulias project read me
+
+Project repository
+https://github.com/Gregcou/TheProject
+
+Style guide used
+https://github.com/airbnb/javascript/tree/master/react
+
+I used a linter to follow the style 
+guide except for some rules i decided to omit
+which can be seen at the top of each file.
+
+An example of the style guide is using camel
+case for variable names.
+
+The emulator does not run very well on my laptop so 
+it is slow but all actions still happen properly except
+for sometimes the photo does not appear after it has been 
+taken even though the code is there to refresh it but it
+will always appear when you leave and come back to the 
+page 
