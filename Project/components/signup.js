@@ -89,10 +89,10 @@ class signup extends Component {
         return (
           <View style={sharedStyles.flexContainer}>
               <Text style={sharedStyles.regularText}>sign up</Text>
-              <TextInput placeholder="first name" onChangeText={this.updatefirstName} value={this.state.first_name}/>
-              <TextInput placeholder="last name" onChangeText={this.updatelastName} value={this.state.last_name}/>
-              <TextInput placeholder="email address" onChangeText={this.updateEmail} value={this.state.email}/>
-              <TextInput maxLength={14} secureTextEntry placeholder="Password" onChangeText={this.updatePassword} value={this.state.password}/>
+              <TextInput label="First name" placeholder="first name" onChangeText={this.updatefirstName} value={this.state.first_name}/>
+              <TextInput label="Last name" placeholder="last name" onChangeText={this.updatelastName} value={this.state.last_name}/>
+              <TextInput label="Email address" placeholder="email address" onChangeText={this.updateEmail} value={this.state.email}/>
+              <TextInput label="Password" maxLength={14} secureTextEntry placeholder="Password" onChangeText={this.updatePassword} value={this.state.password}/>
               <Button title="Sign Up" onPress={this.signUp}/>
           </View>
         );

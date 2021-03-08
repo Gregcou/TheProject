@@ -177,6 +177,7 @@ class Review extends Component {
                     source={{uri: 'http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location_id + "/review/" + this.props.data.review.review_id + "/photo?timestamp=" + Date.now()}}
                     style={sharedStyles.pic}
                     onError={this.onErrorGettingImage}
+                    alt="User submitted image for review"
                   />
                 ) : (
                   <View />

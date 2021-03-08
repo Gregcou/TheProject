@@ -121,15 +121,15 @@ class createreview extends Component {
         return (
             <View style={sharedStyles.flexContainer}>
               <Text style={sharedStyles.regularText}>Overall Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateOverallRating}/>
+              <TextInput label="Overall Rating" placeholder="0" maxLength={1} onChangeText={this.updateOverallRating}/>
               <Text style={sharedStyles.regularText}>Price Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updatepriceRating}/>
+              <TextInput label="Price Rating" placeholder="0" maxLength={1} onChangeText={this.updatepriceRating}/>
               <Text style={sharedStyles.regularText}>Quality Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateQualityRating}/>
+              <TextInput label="Quality Rating" placeholder="0" maxLength={1} onChangeText={this.updateQualityRating}/>
               <Text style={sharedStyles.regularText}>Cleanliness Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateClenlinessRating}/>
+              <TextInput label="Cleanliness Rating" placeholder="0" maxLength={1} onChangeText={this.updateClenlinessRating}/>
               <Text style={sharedStyles.regularText}>Review Body: </Text>
-              <TextInput placeholder="..."  onChangeText={this.updateReviewBody}/>
+              <TextInput label="Review Body" placeholder="..."  onChangeText={this.updateReviewBody}/>
               <Button title="Create Review" onPress={() => {this.createReview()}}/>
             </View>
         );

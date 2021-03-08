@@ -105,6 +105,7 @@ class home extends Component {
                                 source={{uri:item.photo_path}}
                                     style={sharedStyles.pic}
                                     onError={this.onErrorGettingImage}
+                                    alt="Location image"
                                 />
                                 ) : (
                                 <View />

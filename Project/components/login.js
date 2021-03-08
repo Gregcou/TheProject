@@ -121,8 +121,8 @@ class login extends Component {
         return (
             <View style={sharedStyles.flexContainer}>
                 <Text style={sharedStyles.subTitleText}>Login</Text>
-                <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
-                <TextInput maxLength={14} secureTextEntry placeholder="Password" onChangeText={this.updatePassword}/>
+                <TextInput label="Email Address" placeholder="Email" onChangeText={this.updateEmail}/>
+                <TextInput label="Password" maxLength={14} secureTextEntry placeholder="Password" onChangeText={this.updatePassword}/>
                 <Button title="Log in" onPress={this.login}/>
             </View>
         );

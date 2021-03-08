@@ -258,23 +258,23 @@ class editreview extends Component {
             <View style={sharedStyles.flexContainer}>
               <View style={sharedStyles.profileEditContainer}>
                 <Text style={sharedStyles.regularText}>Overall Rating: </Text>
-                <TextInput value={this.state.overall_rating.toString()} maxLength={1} onChangeText={this.updateOverallRating}/>
+                <TextInput label="Overall Rating" value={this.state.overall_rating.toString()} maxLength={1} onChangeText={this.updateOverallRating}/>
               </View>
               <View style={sharedStyles.profileEditContainer}>
                 <Text style={sharedStyles.regularText}>Price Rating: </Text>
-                <TextInput value={this.state.price_rating.toString()} maxLength={1} onChangeText={this.updatepriceRating}/>
+                <TextInput label="Price Rating" value={this.state.price_rating.toString()} maxLength={1} onChangeText={this.updatepriceRating}/>
               </View>
               <View style={sharedStyles.profileEditContainer}>
                 <Text style={sharedStyles.regularText}>Quality Rating: </Text>
-                <TextInput value={this.state.quality_rating.toString()} maxLength={1} onChangeText={this.updateQualityRating}/>
+                <TextInput label="Quality Rating" value={this.state.quality_rating.toString()} maxLength={1} onChangeText={this.updateQualityRating}/>
               </View>
               <View style={sharedStyles.profileEditContainer}>
               <Text style={sharedStyles.regularText}>Cleanliness Rating: </Text>
-              <TextInput value={this.state.clenliness_rating.toString()} maxLength={1} onChangeText={this.updateClenlinessRating}/>
+              <TextInput label="Cleanliness Rating" value={this.state.clenliness_rating.toString()} maxLength={1} onChangeText={this.updateClenlinessRating}/>
               </View>
               
               <Text style={sharedStyles.regularText}>Review Body: </Text>
-              <TextInput value={this.state.review_body}  onChangeText={this.updateReviewBody}/>
+              <TextInput label="Review Body" value={this.state.review_body}  onChangeText={this.updateReviewBody}/>
               {this.state.cameraOpen ? (
                   <RNCamera ref={ref => {
                     this.camera = ref;
