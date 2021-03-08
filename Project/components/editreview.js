@@ -30,7 +30,8 @@ class editreview extends Component {
       clenliness_rating: review.clenliness_rating,
       review_body:review.review_body,
       loc_id: JSON.stringify(loc_id),
-      review: review
+      review: review,
+      cameraOpen: false
     }
   }
 
@@ -243,6 +244,14 @@ class editreview extends Component {
               })
             }
 
+            openCamera = () => {
+              this.setState({cameraOpen: true})
+            }
+
+            closeCamera = () => {
+              this.setState({cameraOpen: false})
+            }
+
     render(){
         
         return (
@@ -266,15 +275,26 @@ class editreview extends Component {
               
               <Text style={sharedStyles.regularText}>Review Body: </Text>
               <TextInput value={this.state.review_body}  onChangeText={this.updateReviewBody}/>
-              <Button title="Edit Review" onPress={() => {this.updateReview()}}/>
-              <Button title="Delete Review" onPress={() => {this.deleteReview()}}/>
-              <RNCamera ref={ref => {
-                this.camera = ref;
-              }}
-              style={sharedStyles.preview}
-              />
-              <Button title="Take Photo" onPress={() => {this.takePicture()}}/>
+              {this.state.cameraOpen ? (
+                  <RNCamera ref={ref => {
+                    this.camera = ref;
+                  }}
+                  style={sharedStyles.preview}
+                  />
+                ) : (
+                  <Button title="Open Camera" onPress={() => {this.openCamera()}}/>
+                )
+                }
+                {this.state.cameraOpen ? (
+                 <Button title="Take Photo" onPress={() => {this.takePicture()}}/>
+                ) : (
+                  <View/>
+                )
+                }
+              <Button title="Close Camera" onPress={() => {this.closeCamera()}}/>
               <Button title="Delete Review Photo" onPress={() => {this.deleteReviewPhoto()}}/>
+              <Button title="Submit Review Edit" onPress={() => {this.updateReview()}}/>
+              <Button title="Delete Review" onPress={() => {this.deleteReview()}}/>
             </View>
         );
     }

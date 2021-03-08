@@ -27,7 +27,10 @@ class home extends Component {
             first_name: "",
             last_name: "",
             email: "",
-            password: ""
+            password: "",
+            favouritesOpen: false,
+            likedReviewsOpen: false,
+            reviewsOpen: false
         }
     }
     
@@ -158,6 +161,30 @@ class home extends Component {
       }
     }
 
+    openFavourites = () => {
+      this.setState({favouritesOpen: true, reviewsOpen: false, likedReviewsOpen: false})
+    }
+
+    closeFavourites = () => {
+      this.setState({favouritesOpen: false})
+    }
+
+    openReviews = () => {
+      this.setState({reviewsOpen: true, favouritesOpen: false, likedReviewsOpen: false})
+    }
+
+    closeReviews = () => {
+      this.setState({reviewsOpen: false})
+    }
+
+    openLikedReviews = () => {
+      this.setState({likedReviewsOpen: true, favouritesOpen: false, reviewsOpen: false})
+    }
+
+    closeLikedReviews = () => {
+      this.setState({likedReviewsOpen: false})
+    }
+
 
     
 
@@ -176,49 +203,76 @@ class home extends Component {
           let locationInfo={};
             return (
                 <View>
-                    <Text>{this.state.user_info.first_name}</Text>
-                    <Text>{this.state.user_info.last_name}</Text>
-                    <Text>{this.state.user_info.email}</Text>
-                    <Text>Edit details</Text>
+                  <View style={sharedStyles.profileEditContainer}>
+                    <Text style={sharedStyles.regularText}>First name: {this.state.user_info.first_name}</Text>
+                    <Text style={sharedStyles.regularText}>  Last name: {this.state.user_info.last_name}</Text>
+                    </View>
+                    <Text style={sharedStyles.regularText}>{this.state.user_info.email}</Text>
+                    <Text style={sharedStyles.regularText}>Edit details</Text>
                     <TextInput placeholder="First_name" onChangeText={this.updateFirstName}/>
                     <TextInput placeholder="Last_name" onChangeText={this.updateLastName}/>
                     <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
                     <TextInput secureTextEntry placeholder="Password" onChangeText={this.updatePassword}/>
-                    <Button title="Log in" onPress={this.updateUserInfo}/>
+                    <Button title="Submit Profile Update" onPress={this.updateUserInfo}/>
                     <Text>Favourite locations</Text>
-                    <FlatList
-                        data={this.state.user_info.favourite_locations}
-                        renderItem={({item}) => (
-                            <View>
-                                <LocationComponent updateProfileScreen={this.getData} data={locationInfo={onProfilePage: true,location: item}} />
-                            </View>
-                        )}
-                        keyExtractor={(item) => item.location_id.toString()}
-                    />
+                    <Button title="Close Favourite Locations" onPress={() => {this.closeFavourites()}}/>
+                    {this.state.favouritesOpen ? (
+                      <FlatList
+                      data={this.state.user_info.favourite_locations}
+                      renderItem={({item}) => (
+                          <View>
+                              <LocationComponent updateProfileScreen={this.getData} data={locationInfo={onProfilePage: true,location: item}} />
+                          </View>
+                      )}
+                      keyExtractor={(item) => item.location_id.toString()}
+                      />
+                      ) : (
+                      <Button title="Open Favourite Locations" onPress={() => {this.openFavourites()}}/>
+                      )
+                      }
+                      
+                    
+
                     <Text>Reviews</Text>
-                    <FlatList
-                        data={this.state.user_info.reviews}
-                        renderItem={({item}) => (
-                            <View>
-                              <Text>----------------------------------</Text>
-                              <Text>{item.location.location_name}</Text>
-                              <Review data={locationReviews={review: item.review,location_id: item.location.location_id}} />
-                            </View>
-                        )}
-                        keyExtractor={(item,index) => item.review.review_id.toString()}
-                    />
+                    <Button title="Close Reviews" onPress={() => {this.closeReviews()}}/>
+                    {this.state.reviewsOpen ? (
+                      <FlatList
+                      data={this.state.user_info.reviews}
+                      renderItem={({item}) => (
+                          <View>
+                            <Text>----------------------------------</Text>
+                            <Text>{item.location.location_name}</Text>
+                            <Review data={locationReviews={review: item.review,location_id: item.location.location_id}} />
+                          </View>
+                      )}
+                      keyExtractor={(item,index) => item.review.review_id.toString()}
+                      />
+                      ) : (
+                      <Button title="Open Reviews" onPress={() => {this.openReviews()}}/>
+                      )
+                      }
+                      
+                    
                     <Text>Liked reviews</Text>
-                    <FlatList
-                        data={this.state.user_info.liked_reviews}
-                        renderItem={({item}) => (
-                            <View>
-                              <Text>----------------------------------</Text>
-                              <Text>{item.location.location_name}</Text>
-                              <Review data={locationReviews={review: item.review,location_id: item.location.location_id}} />
-                            </View>
-                        )}
-                        keyExtractor={(item,index) => item.review.review_id.toString()}
-                    />
+                    <Button title="Close Liked Reviews" onPress={() => {this.closeLikedReviews()}}/>
+                    {this.state.likedReviewsOpen ? (
+                      <FlatList
+                      data={this.state.user_info.liked_reviews}
+                      renderItem={({item}) => (
+                          <View>
+                            <Text>----------------------------------</Text>
+                            <Text>{item.location.location_name}</Text>
+                            <Review data={locationReviews={review: item.review,location_id: item.location.location_id}} />
+                          </View>
+                      )}
+                      keyExtractor={(item,index) => item.review.review_id.toString()}
+                      />
+                      ) : (
+                      <Button title="Open Reviews" onPress={() => {this.openLikedReviews()}}/>
+                      )
+                      }
+                      
+                    
                 </View>
             );
         }      
