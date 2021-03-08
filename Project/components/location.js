@@ -1,8 +1,16 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-template */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-else-return */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-unused-expressions */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ActivityIndicator, ToastAndroid  } from 'react-native';
+import {Text, Button, View, ActivityIndicator, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocationComponent from './renderComponents/locationComponent';
-import { shared_styles } from './Styles/Shared';
+import { sharedStyles } from './Styles/Shared';
 
 class location extends Component {
 
@@ -32,10 +40,8 @@ class location extends Component {
 
 
   getData = async () => {
-    console.log("getdata");
     const {loc_id} = this.props.route.params;
     const value = await AsyncStorage.getItem('@session_token');
-    console.log(value);
     return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + JSON.stringify(loc_id),
     {headers: {
         'X-Authorization': value
@@ -58,17 +64,14 @@ class location extends Component {
         });
     })
     .catch((error) =>{
-        console.log(error);
         ToastAndroid.show(error, ToastAndroid.SHORT)
     });
 }
 
 getUserReviews = async () => {
-  console.log("get profile data");
   const value = await AsyncStorage.getItem('@session_token');
-  const user_id = await AsyncStorage.getItem('@user_id');
-  console.log(value);
-  return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + user_id,
+  const userId = await AsyncStorage.getItem('@user_id');
+  return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + userId,
   {headers: {
       'X-Authorization': value
     }},)
@@ -93,24 +96,20 @@ getUserReviews = async () => {
       }
     })
   .then(async (responseJson) => {
-    let userReviews = [];
+    const userReviews = [];
     for (let index = 0; index < responseJson.reviews.length; index++) {
       userReviews.push(responseJson.reviews[index].review.review_id);
     }
-    console.log(userReviews);
     await AsyncStorage.setItem('@userReviews', JSON.stringify(userReviews));
     this.getData();
   })
   .catch((error) =>{
-      console.log(error);
       ToastAndroid.show(error, ToastAndroid.SHORT)
   });
 }
 
 
   render(){
-
-    const navigation = this.props.navigation;
 
     if(this.state.isLoading){
       return(
@@ -123,9 +122,9 @@ getUserReviews = async () => {
     else{
       let locationInfo={}
       return (
-        <View style={shared_styles.reviewList}>
-          <Button title="Create Review" onPress={ () => this.props.navigation.navigate("createreview", {"loc_id": this.state.location.location_id})}></Button>
-          <LocationComponent navigation={this.props.navigation} data={locationInfo={onProfilePage: false,location: this.state.location}}></LocationComponent>
+        <View style={sharedStyles.flexContainer}>
+          <Button title="Create Review" onPress={ () => this.props.navigation.navigate("createreview", {"loc_id": this.state.location.location_id})} />
+          <LocationComponent navigation={this.props.navigation} data={locationInfo={onProfilePage: false,location: this.state.location}} />
         </View>
     );
   }

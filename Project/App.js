@@ -1,19 +1,14 @@
 import 'react-native-gesture-handler';
-import React, {Component, useState, useEffect} from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator  } from 'react-native';
-import { Container } from 'native-base';
-import { NavigationContainer, StackActions } from '@react-navigation/native';
+import React, {Component} from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import login from './components/login';
 import signup from './components/signup';
 import home from './components/home';
 import profile from './components/profile';
 import location from './components/location';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import logout from './components/logout';
-import { shared_styles } from './components/Styles/Shared';
 import createreview from './components/createreview';
 import editreview from './components/editreview';
 

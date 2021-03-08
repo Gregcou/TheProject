@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-const shared_styles = StyleSheet.create({
+const sharedStyles = StyleSheet.create({
     flexContainer: {
         flex: 1,
         flexDirection: 'column'
+      },
+      profileEditContainer: {
+        alignItems: "center",
+        flexDirection: 'row'
       },
       reviewFlexContainer: {
         flex: 1,
@@ -16,12 +20,10 @@ const shared_styles = StyleSheet.create({
       regularText: {
         fontSize:18,
         color:'black',
-        //flex: 1
       },
       subTitleText: {
         fontSize:22,
         color:'black',
-        //flex: 3
       },
       pic: {
         height: 159,
@@ -34,13 +36,11 @@ const shared_styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#DDDDDD",
         padding: 10,
-        //flex: 1
       },
       likedButton: {
         alignItems: "center",
         backgroundColor: "#00FF00",
         padding: 10,
-        //flex: 1
       },
       preview: {
         flex: 1,
@@ -55,7 +55,7 @@ const shared_styles = StyleSheet.create({
         flex: 1
       },
       viewText: {
-        flex: 4,
+        flex: 2,
         justifyContent: 'center',
         alignItems: 'center'
       },
@@ -64,4 +64,4 @@ const shared_styles = StyleSheet.create({
       }
 });
 
-export { shared_styles }
+export { sharedStyles }

@@ -1,7 +1,14 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-throw-literal */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable prefer-template */
 import React, {Component } from 'react';
-import { TextInput, Text, View, Button, FlatList, TouchableOpacity, StyleSheet, Image, ToastAndroid  } from 'react-native';
-import { shared_styles } from '../Styles/Shared';
+import {Text, View, TouchableOpacity, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { sharedStyles } from '../Styles/Shared';
 import Reviewlist from '../reviewlist';
 
 class LocationComponent extends Component {
@@ -22,16 +29,14 @@ class LocationComponent extends Component {
 
 
     getLocations = async () => {
-        let userFavourite_locations = await AsyncStorage.getItem('@userFavourite_locations');
-        this.state.userFavourite_locations = JSON.parse(userFavourite_locations);
-        console.log(this.state.userFavourite_locations)
+        const userFavouriteLocations = await AsyncStorage.getItem('@userFavourite_locations');
+        this.state.userFavourite_locations = JSON.parse(userFavouriteLocations);
         this.setState({
           isLoading: false
         });
       }
 
       favouriteLocation = async () => {
-        console.log("FAVOURITE");
         const value = await AsyncStorage.getItem('@session_token');
         return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location.location_id + "/favourite", {
             method: 'post',
@@ -42,12 +47,11 @@ class LocationComponent extends Component {
           .then(async (response)=> {
             if (response.status === 200){
                 ToastAndroid.show("Favourited", ToastAndroid.SHORT);
-                let userFavourite_locations = await AsyncStorage.getItem('@userFavourite_locations');
-                this.state.userFavourite_locations = JSON.parse(userFavourite_locations);
+                const userFavouriteLocations = await AsyncStorage.getItem('@userFavourite_locations');
+                this.state.userFavourite_locations = JSON.parse(userFavouriteLocations);
                 this.state.userFavourite_locations.push(this.props.data.location.location_id);
                 this.setState(this.state);
                 await AsyncStorage.setItem('@userFavourite_locations', JSON.stringify(this.state.userFavourite_locations));
-                console.log(this.state.userFavourite_locations);
             }
             else if(response.status === 400){
               throw 'error favouriting location';
@@ -63,13 +67,11 @@ class LocationComponent extends Component {
             }
           })
           .catch((error) => {
-            console.log(error);
             ToastAndroid.show(error, ToastAndroid.SHORT)
           })
         }
   
         removeFavouriteLocatation = async () => {
-          console.log(" REMOVE FAVOURITE");
           const value = await AsyncStorage.getItem('@session_token');
           return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.props.data.location.location_id + "/favourite", {
               method: 'delete',
@@ -80,17 +82,14 @@ class LocationComponent extends Component {
             .then(async (response)=> {
               if (response.status === 200){
                   ToastAndroid.show("Favourite removed", ToastAndroid.SHORT);
-                  console.log(this.state.userFavourite_locations);
-                  let userFavourite_locations = await AsyncStorage.getItem('@userFavourite_locations');
-                  this.state.userFavourite_locations = JSON.parse(userFavourite_locations);
-                  let index = this.state.userFavourite_locations.indexOf(this.props.data.location.location_id);
+                  const userFavouriteLocations = await AsyncStorage.getItem('@userFavourite_locations');
+                  this.state.userFavourite_locations = JSON.parse(userFavouriteLocations);
+                  const index = this.state.userFavourite_locations.indexOf(this.props.data.location.location_id);
                   this.state.userFavourite_locations.splice(index,1);
                   this.setState(this.state);
                   await AsyncStorage.setItem('@userFavourite_locations', JSON.stringify(this.state.userFavourite_locations));
-                  console.log(this.state.userFavourite_locations);
                   if (this.props.data.onProfilePage)
                   {
-                    console.log("updateProfileScreen")
                     this.props.updateProfileScreen();
                   }
               }
@@ -108,7 +107,6 @@ class LocationComponent extends Component {
               }
             })
             .catch((error) => {
-              console.log(error);
               ToastAndroid.show(error, ToastAndroid.SHORT)
             })
           }
@@ -116,35 +114,35 @@ class LocationComponent extends Component {
     render(){
 
         const location = this.props.data.location;
-        const location_reviews={reviewList: location.location_reviews,location_id: location.location_id}
+        const locationReviews={reviewList: location.location_reviews,location_id: location.location_id}
         return (
-            <View style={shared_styles.flexContainer}>
-                <Text style={shared_styles.regularText}>{location.location_name}</Text>
-                <Text style={shared_styles.regularText}>{location.location_town}</Text>
-                <Text style={shared_styles.regularText}>Average overall rating: {location.avg_overall_rating} </Text>
-                <Text style={shared_styles.regularText}>Average price rating: {location.avg_price_rating}</Text>
-                <Text style={shared_styles.regularText}>Average quality rating: {location.avg_quality_rating}</Text>
-                <Text style={shared_styles.regularText}>Average clenliness rating: {location.avg_clenliness_rating}</Text>
+            <View style={sharedStyles.flexContainer}>
+                <Text style={sharedStyles.regularText}>{location.location_name}</Text>
+                <Text style={sharedStyles.regularText}>{location.location_town}</Text>
+                <Text style={sharedStyles.regularText}>Average overall rating: {location.avg_overall_rating} </Text>
+                <Text style={sharedStyles.regularText}>Average price rating: {location.avg_price_rating}</Text>
+                <Text style={sharedStyles.regularText}>Average quality rating: {location.avg_quality_rating}</Text>
+                <Text style={sharedStyles.regularText}>Average clenliness rating: {location.avg_clenliness_rating}</Text>
                 {this.state.userFavourite_locations.includes(location.location_id) ? (
                   <TouchableOpacity
-                  style={shared_styles.likedButton}
+                  style={sharedStyles.likedButton}
                   onPress={ () => this.removeFavouriteLocatation()}
                   >
-                  <Text style={shared_styles.subTitleText}>FAVOURITED</Text>
+                  <Text style={sharedStyles.subTitleText}>FAVOURITED</Text>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                  style={shared_styles.button}
+                  style={sharedStyles.button}
                   onPress={ () => this.favouriteLocation()}
                   >
-                  <Text style={shared_styles.subTitleText}>FAVOURITE</Text>
+                  <Text style={sharedStyles.subTitleText}>FAVOURITE</Text>
                   </TouchableOpacity>
                 )
                 }
                 {this.props.data.onProfilePage ? (
-                    <View></View>
+                    <View />
                 ) : (
-                    <Reviewlist style={shared_styles.reviewList} navigation={this.props.navigation} data={location_reviews}></Reviewlist>
+                    <Reviewlist style={sharedStyles.reviewList} navigation={this.props.navigation} data={locationReviews} />
                 )
                 }
                 

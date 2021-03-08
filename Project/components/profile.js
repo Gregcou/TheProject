@@ -1,9 +1,19 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable dot-notation */
+/* eslint-disable eqeqeq */
+/* eslint-disable object-shorthand */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-else-return */
+/* eslint-disable prefer-template */
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-unused-expressions */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, ToastAndroid  } from 'react-native';
+import { TextInput, Text, Button, View, FlatList, ActivityIndicator, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Reviewlist from './reviewlist';
 import Review from './review';
-import { shared_styles } from './Styles/Shared';
+import { sharedStyles } from './Styles/Shared';
 import LocationComponent from './renderComponents/locationComponent';
 
 class home extends Component {
@@ -42,11 +52,9 @@ class home extends Component {
     }
 
     getData = async () => {
-        console.log("get profile data");
         const value = await AsyncStorage.getItem('@session_token');
-        const user_id = await AsyncStorage.getItem('@user_id');
-        console.log(value);
-        return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + user_id,
+        const userId = await AsyncStorage.getItem('@user_id');
+        return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + userId,
         {headers: {
             'X-Authorization': value
           }},)
@@ -71,16 +79,16 @@ class home extends Component {
             });
         })
         .catch((error) =>{
-            console.log(error);
+          ToastAndroid.show(error, ToastAndroid.SHORT)
         });
     }
 
-    updateFirst_name = (first_name) => {
-      this.setState({first_name: first_name})
+    updateFirstName = (firstName) => {
+      this.setState({first_name: firstName})
     }
   
-    updateLast_name = (last_name) => {
-      this.setState({last_name: last_name})
+    updateLastName = (lastName) => {
+      this.setState({last_name: lastName})
     }
 
     updateEmail = (email) => {
@@ -92,17 +100,13 @@ class home extends Component {
     }
 
     updateUserInfo = async () => {
-      console.log("update user info")
       if(this.state.first_name == "" && this.state.last_name == "" && this.state.email == "" && this.state.password == ""  ){
         ToastAndroid.show("No new information entered", ToastAndroid.LONG)
       }
       else{
         userInfoObject={}
-        console.log(this.state.first_name)
         if(this.state.first_name != ""){
           userInfoObject['first_name'] = this.state.first_name;
-          console.log("inside if")
-          console.log(this.state.first_name)
         }
 
         if(this.state.last_name != ""){
@@ -118,8 +122,8 @@ class home extends Component {
         }
 
         const value = await AsyncStorage.getItem('@session_token');
-        const user_id = await AsyncStorage.getItem('@user_id');
-        return fetch("http://10.0.2.2:3333/api/1.0.0/user/" + user_id, {
+        const userId = await AsyncStorage.getItem('@user_id');
+        return fetch("http://10.0.2.2:3333/api/1.0.0/user/" + userId, {
           method: 'patch',
           headers: {
             'Content-Type': 'application/json',
@@ -149,7 +153,6 @@ class home extends Component {
           }
         })
         .catch((error) => {
-          console.log(error);
           ToastAndroid.show(error, ToastAndroid.SHORT)
         })
       }
@@ -160,7 +163,6 @@ class home extends Component {
 
     render(){
 
-        const navigation = this.props.navigation;
         if(this.state.isLoading){
             return(
                 <View>
@@ -170,26 +172,25 @@ class home extends Component {
             );
         }
         else{
-          let location_reviews={};
+          let locationReviews={};
           let locationInfo={};
             return (
                 <View>
                     <Text>{this.state.user_info.first_name}</Text>
-                    {console.log(this.state.user_info.first_name)}
                     <Text>{this.state.user_info.last_name}</Text>
                     <Text>{this.state.user_info.email}</Text>
                     <Text>Edit details</Text>
-                    <TextInput placeholder="First_name" onChangeText={this.updateFirst_name}/>
-                    <TextInput placeholder="Last_name" onChangeText={this.updateLast_name}/>
+                    <TextInput placeholder="First_name" onChangeText={this.updateFirstName}/>
+                    <TextInput placeholder="Last_name" onChangeText={this.updateLastName}/>
                     <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
-                    <TextInput secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
+                    <TextInput secureTextEntry placeholder="Password" onChangeText={this.updatePassword}/>
                     <Button title="Log in" onPress={this.updateUserInfo}/>
                     <Text>Favourite locations</Text>
                     <FlatList
                         data={this.state.user_info.favourite_locations}
                         renderItem={({item}) => (
                             <View>
-                                <LocationComponent updateProfileScreen={this.getData} data={locationInfo={onProfilePage: true,location: item}}></LocationComponent>
+                                <LocationComponent updateProfileScreen={this.getData} data={locationInfo={onProfilePage: true,location: item}} />
                             </View>
                         )}
                         keyExtractor={(item) => item.location_id.toString()}
@@ -201,7 +202,7 @@ class home extends Component {
                             <View>
                               <Text>----------------------------------</Text>
                               <Text>{item.location.location_name}</Text>
-                              <Review data={location_reviews={review: item.review,location_id: item.location.location_id}}></Review>
+                              <Review data={locationReviews={review: item.review,location_id: item.location.location_id}} />
                             </View>
                         )}
                         keyExtractor={(item,index) => item.review.review_id.toString()}
@@ -213,7 +214,7 @@ class home extends Component {
                             <View>
                               <Text>----------------------------------</Text>
                               <Text>{item.location.location_name}</Text>
-                              <Review data={location_reviews={review: item.review,location_id: item.location.location_id}}></Review>
+                              <Review data={locationReviews={review: item.review,location_id: item.location.location_id}} />
                             </View>
                         )}
                         keyExtractor={(item,index) => item.review.review_id.toString()}

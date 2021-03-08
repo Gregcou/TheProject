@@ -1,7 +1,12 @@
-import { Toast } from 'native-base';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-else-return */
+/* eslint-disable no-undef */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable object-shorthand */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, Alert, ToastAndroid  } from 'react-native';
-import { shared_styles } from './Styles/Shared';
+import { TextInput, Text, Button, View, ToastAndroid  } from 'react-native';
+import { sharedStyles } from './Styles/Shared';
 
 
 class signup extends Component {
@@ -17,12 +22,12 @@ class signup extends Component {
     }
   }
 
-  updatefirst_name = (first_name) => {
-    this.setState({first_name: first_name})
+  updatefirstName = (firstName) => {
+    this.setState({first_name: firstName})
   }
 
-  updatelast_name = (last_name) => {
-    this.setState({last_name: last_name})
+  updatelastName = (lastName) => {
+    this.setState({last_name: lastName})
   }
 
   updateEmail = (email) => {
@@ -34,14 +39,14 @@ class signup extends Component {
   }
 
   signUp = () => {
-    if(this.state.first_name == "" || this.state.last_name == "" || this.state.email == "" || this.state.password == "" ){
+    if(this.state.first_name === "" || this.state.last_name === "" || this.state.email === "" || this.state.password === "" ){
       ToastAndroid.show("Enter first name, last name, email and password", ToastAndroid.SHORT)
     }
     else if(!this.state.email.includes("@")){
       ToastAndroid.show("Please use a valid email address", ToastAndroid.LONG)
     }
     else{
-      let to_send = {
+      const toSend = {
         first_name: this.state.first_name,
         last_name: this.state.last_name,
         email: this.state.email,
@@ -53,7 +58,7 @@ class signup extends Component {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(to_send)
+        body: JSON.stringify(toSend)
       })
       .then((response)=> {
         if (response.status === 201){
@@ -71,7 +76,6 @@ class signup extends Component {
         this.props.navigation.navigate("login")
       })
       .catch((error) => {
-        console.log(error);
         ToastAndroid.show(error, ToastAndroid.SHORT)
       })
 
@@ -81,15 +85,14 @@ class signup extends Component {
 
     render(){
 
-        const navigation = this.props.navigation;
 
         return (
-          <View style={shared_styles.flexContainer}>
-              <Text style={shared_styles.regularText}>sign up</Text>
-              <TextInput placeholder="first name" onChangeText={this.updatefirst_name} value={this.state.first_name}/>
-              <TextInput placeholder="last name" onChangeText={this.updatelast_name} value={this.state.last_name}/>
+          <View style={sharedStyles.flexContainer}>
+              <Text style={sharedStyles.regularText}>sign up</Text>
+              <TextInput placeholder="first name" onChangeText={this.updatefirstName} value={this.state.first_name}/>
+              <TextInput placeholder="last name" onChangeText={this.updatelastName} value={this.state.last_name}/>
               <TextInput placeholder="email address" onChangeText={this.updateEmail} value={this.state.email}/>
-              <TextInput maxLength={14} secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword} value={this.state.password}/>
+              <TextInput maxLength={14} secureTextEntry placeholder="Password" onChangeText={this.updatePassword} value={this.state.password}/>
               <Button title="Sign Up" onPress={this.signUp}/>
           </View>
         );

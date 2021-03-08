@@ -1,8 +1,13 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-else-return */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, ActivityIndicator, ToastAndroid  } from 'react-native';
+import {Text, View, FlatList, TouchableOpacity, Image, ActivityIndicator, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Reviewlist from './reviewlist';
-import { shared_styles } from './Styles/Shared';
+import { sharedStyles } from './Styles/Shared';
 
 class home extends Component {
 
@@ -62,7 +67,6 @@ class home extends Component {
             });
         })
         .catch((error) =>{
-            console.log(error);
             ToastAndroid.show(error, ToastAndroid.SHORT)
         });
     }
@@ -75,12 +79,11 @@ class home extends Component {
 
     render(){
 
-        const navigation = this.props.navigation;
         if(this.state.isLoading){
             return(
                 <View>
                     <Text>Loading...</Text>
-                    <ActivityIndicator/>
+          <ActivityIndicator />
                 </View>
             );
         }
@@ -92,19 +95,19 @@ class home extends Component {
                         renderItem={({item}) => (
                             <View>
                                 <TouchableOpacity
-                                    style={shared_styles.button}
+                                    style={sharedStyles.button}
                                     onPress={ () => this.props.navigation.navigate("location", {"loc_id": item.location_id})}
                                 >
-                                <Text style={shared_styles.subTitleText}>{item.location_name}</Text>
-                                <Text style={shared_styles.subTitleText}>{item.location_town}</Text>
+                                <Text style={sharedStyles.subTitleText}>{item.location_name}</Text>
+                                <Text style={sharedStyles.subTitleText}>{item.location_town}</Text>
                                 {this.state.hasPic ? (
                                 <Image
                                 source={{uri:item.photo_path}}
-                                    style={shared_styles.pic}
+                                    style={sharedStyles.pic}
                                     onError={this.onErrorGettingImage}
                                 />
                                 ) : (
-                                <View></View>
+                                <View />
                                 )
                                 }
                                 </TouchableOpacity>

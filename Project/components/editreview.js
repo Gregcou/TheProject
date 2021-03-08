@@ -1,8 +1,18 @@
+/* eslint-disable radix */
+/* eslint-disable dot-notation */
+/* eslint-disable no-else-return */
+/* eslint-disable object-shorthand */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-throw-literal */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable prefer-template */
+/* eslint-disable no-undef */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ToastAndroid  } from 'react-native';
+import { TextInput, Text, Button, View, PermissionsAndroid, ToastAndroid  } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { shared_styles } from './Styles/Shared';
+import { sharedStyles } from './Styles/Shared';
 
 
 class editreview extends Component {
@@ -37,14 +47,13 @@ class editreview extends Component {
         this.props.navigation.navigate("login");
     }
   }
+
   takePicture = async() => {
     this.requestCameraPermission();
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
       const value = await AsyncStorage.getItem('@session_token');
-      console.log(value);
       return fetch("http://10.0.2.2:3333/api/1.0.0/location/" + this.state.loc_id + "/review/" +  this.state.review.review_id + "/photo", {
         method: 'POST',
         headers: {
@@ -71,7 +80,7 @@ class editreview extends Component {
         }
       })
       .catch((error) => {
-        console.error(error);
+        ToastAndroid.show(error, ToastAndroid.SHORT)
       });
     }
   }
@@ -89,15 +98,13 @@ class editreview extends Component {
           },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('you can access location');
           return true;
         }
         else {
-          console.log('Location permission denied');
           return false;
         }
-      } catch (err) {
-        console.warn(err);
+      } catch (error) {
+        ToastAndroid.show(error, ToastAndroid.SHORT)
       }
     }
 
@@ -145,7 +152,6 @@ class editreview extends Component {
           }
         })
         .catch((error) => {
-          console.log(error);
           ToastAndroid.show(error, ToastAndroid.SHORT)
         })
   
@@ -153,28 +159,27 @@ class editreview extends Component {
         
     }
 
-    updateOverall_rating = (overall_rating) => {
-      this.setState({overall_rating: overall_rating})
+    updateOverallRating = (overallRating) => {
+      this.setState({overall_rating: overallRating})
     }
   
-    updateprice_rating = (price_rating) => {
-      this.setState({price_rating: price_rating})
+    updatepriceRating = (priceRating) => {
+      this.setState({price_rating: priceRating})
     }
 
-    updateQuality_rating = (quality_rating) => {
-      this.setState({quality_rating: quality_rating})
+    updateQualityRating = (qualityRating) => {
+      this.setState({quality_rating: qualityRating})
     }
   
-    updateClenliness_rating = (clenliness_rating) => {
-      this.setState({clenliness_rating: clenliness_rating})
+    updateClenlinessRating = (clenlinessRating) => {
+      this.setState({clenliness_rating: clenlinessRating})
     }
 
-    updateReview_body = (review_body) => {
-      this.setState({review_body: review_body})
+    updateReviewBody = (reviewBody) => {
+      this.setState({review_body: reviewBody})
     }
 
     deleteReview = async () => {
-        console.log("delete function");
         const value = await AsyncStorage.getItem('@session_token');
         return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.loc_id + "/review/" + this.state.review.review_id, {
             method: 'delete',
@@ -204,13 +209,11 @@ class editreview extends Component {
             }
           })
           .catch((error) => {
-            console.log(error);
             ToastAndroid.show(error, ToastAndroid.SHORT)
           })
         }
 
         deleteReviewPhoto = async () => {
-            console.log("delete function");
             const value = await AsyncStorage.getItem('@session_token');
             return fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.loc_id + "/review/" + this.state.review.review_id + "/photo", {
                 method: 'delete',
@@ -236,34 +239,39 @@ class editreview extends Component {
                 }
               })
               .catch((error) => {
-                console.log(error);
                 ToastAndroid.show(error, ToastAndroid.SHORT)
               })
             }
 
     render(){
-
-        const navigation = this.props.navigation;
         
         return (
-            <View style={shared_styles.flexContainer}>
-            <Text style={shared_styles.regularText}>{this.state.review.review_id} </Text>
-              <Text style={shared_styles.regularText}>Overall Rating: </Text>
-              <TextInput value={this.state.overall_rating.toString()} maxLength={1} onChangeText={this.updateOverall_rating}/>
-              <Text style={shared_styles.regularText}>Price Rating: </Text>
-              <TextInput value={this.state.price_rating.toString()} maxLength={1} onChangeText={this.updateprice_rating}/>
-              <Text style={shared_styles.regularText}>Quality Rating: </Text>
-              <TextInput value={this.state.quality_rating.toString()} maxLength={1} onChangeText={this.updateQuality_rating}/>
-              <Text style={shared_styles.regularText}>Cleanliness Rating: </Text>
-              <TextInput value={this.state.clenliness_rating.toString()} maxLength={1} onChangeText={this.updateClenliness_rating}/>
-              <Text style={shared_styles.regularText}>Review Body: </Text>
-              <TextInput value={this.state.review_body}  onChangeText={this.updateReview_body}/>
+            <View style={sharedStyles.flexContainer}>
+              <View style={sharedStyles.profileEditContainer}>
+                <Text style={sharedStyles.regularText}>Overall Rating: </Text>
+                <TextInput value={this.state.overall_rating.toString()} maxLength={1} onChangeText={this.updateOverallRating}/>
+              </View>
+              <View style={sharedStyles.profileEditContainer}>
+                <Text style={sharedStyles.regularText}>Price Rating: </Text>
+                <TextInput value={this.state.price_rating.toString()} maxLength={1} onChangeText={this.updatepriceRating}/>
+              </View>
+              <View style={sharedStyles.profileEditContainer}>
+                <Text style={sharedStyles.regularText}>Quality Rating: </Text>
+                <TextInput value={this.state.quality_rating.toString()} maxLength={1} onChangeText={this.updateQualityRating}/>
+              </View>
+              <View style={sharedStyles.profileEditContainer}>
+              <Text style={sharedStyles.regularText}>Cleanliness Rating: </Text>
+              <TextInput value={this.state.clenliness_rating.toString()} maxLength={1} onChangeText={this.updateClenlinessRating}/>
+              </View>
+              
+              <Text style={sharedStyles.regularText}>Review Body: </Text>
+              <TextInput value={this.state.review_body}  onChangeText={this.updateReviewBody}/>
               <Button title="Edit Review" onPress={() => {this.updateReview()}}/>
               <Button title="Delete Review" onPress={() => {this.deleteReview()}}/>
               <RNCamera ref={ref => {
                 this.camera = ref;
               }}
-              style={shared_styles.preview}
+              style={sharedStyles.preview}
               />
               <Button title="Take Photo" onPress={() => {this.takePicture()}}/>
               <Button title="Delete Review Photo" onPress={() => {this.deleteReviewPhoto()}}/>

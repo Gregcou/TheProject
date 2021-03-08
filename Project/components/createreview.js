@@ -1,8 +1,15 @@
+/* eslint-disable camelcase */
+/* eslint-disable radix */
+/* eslint-disable no-throw-literal */
+/* eslint-disable prefer-template */
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-unused-expressions */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, PermissionsAndroid, ToastAndroid  } from 'react-native';
-import { RNCamera } from 'react-native-camera';
+import { TextInput, Text, Button, View, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { shared_styles } from './Styles/Shared';
+import { sharedStyles } from './Styles/Shared';
 
 
 class createreview extends Component {
@@ -42,6 +49,9 @@ class createreview extends Component {
       else if(this.state.review_body.toLowerCase().includes("tea") || this.state.review_body.toLowerCase().includes("cake") || this.state.review_body.toLowerCase().includes("pastry") || this.state.review_body.toLowerCase().includes("pastries")){
         ToastAndroid.show("Please do not mention tea, cakes or pastries in your review", ToastAndroid.SHORT)
       }
+      else if(this.state.overall_rating > 5 || this.state.overall_rating < 1 || this.state.price_rating > 5 || this.state.price_rating < 1 || this.state.quality_rating > 5 || this.state.quality_rating < 1 || this.state.clenliness_rating > 5 || this.state.clenliness_rating < 1 ){
+        ToastAndroid.show("Review ratings must be between 1 and 5", ToastAndroid.SHORT)
+      }
       else{
         const {loc_id} = this.props.route.params;
         const value = await AsyncStorage.getItem('@session_token');
@@ -79,7 +89,6 @@ class createreview extends Component {
           }
         })
         .catch((error) => {
-          console.log(error);
           ToastAndroid.show(error, ToastAndroid.SHORT)
         })
   
@@ -87,42 +96,40 @@ class createreview extends Component {
         
     }
 
-    updateOverall_rating = (overall_rating) => {
-      this.setState({overall_rating: parseInt(overall_rating)})
+    updateOverallRating = (overallRating) => {
+      this.setState({overall_rating: parseInt(overallRating)})
     }
   
-    updateprice_rating = (price_rating) => {
-      this.setState({price_rating: parseInt(price_rating)})
+    updatepriceRating = (priceRating) => {
+      this.setState({price_rating: parseInt(priceRating)})
     }
 
-    updateQuality_rating = (quality_rating) => {
-      this.setState({quality_rating: parseInt(quality_rating)})
+    updateQualityRating = (qualityRating) => {
+      this.setState({quality_rating: parseInt(qualityRating)})
     }
   
-    updateClenliness_rating = (clenliness_rating) => {
-      this.setState({clenliness_rating: parseInt(clenliness_rating)})
+    updateClenlinessRating = (clenlinessRating) => {
+      this.setState({clenliness_rating: parseInt(clenlinessRating)})
     }
 
-    updateReview_body = (review_body) => {
-      this.setState({review_body: review_body})
+    updateReviewBody = (reviewBody) => {
+      this.setState({review_body: reviewBody})
     }
 
     render(){
-
-        const navigation = this.props.navigation;
         
         return (
-            <View style={shared_styles.flexContainer}>
-              <Text style={shared_styles.regularText}>Overall Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateOverall_rating}/>
-              <Text style={shared_styles.regularText}>Price Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateprice_rating}/>
-              <Text style={shared_styles.regularText}>Quality Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateQuality_rating}/>
-              <Text style={shared_styles.regularText}>Cleanliness Rating: </Text>
-              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateClenliness_rating}/>
-              <Text style={shared_styles.regularText}>Review Body: </Text>
-              <TextInput placeholder="..."  onChangeText={this.updateReview_body}/>
+            <View style={sharedStyles.flexContainer}>
+              <Text style={sharedStyles.regularText}>Overall Rating: </Text>
+              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateOverallRating}/>
+              <Text style={sharedStyles.regularText}>Price Rating: </Text>
+              <TextInput placeholder="0" maxLength={1} onChangeText={this.updatepriceRating}/>
+              <Text style={sharedStyles.regularText}>Quality Rating: </Text>
+              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateQualityRating}/>
+              <Text style={sharedStyles.regularText}>Cleanliness Rating: </Text>
+              <TextInput placeholder="0" maxLength={1} onChangeText={this.updateClenlinessRating}/>
+              <Text style={sharedStyles.regularText}>Review Body: </Text>
+              <TextInput placeholder="..."  onChangeText={this.updateReviewBody}/>
               <Button title="Create Review" onPress={() => {this.createReview()}}/>
             </View>
         );

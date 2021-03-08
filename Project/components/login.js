@@ -1,7 +1,16 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable prefer-const */
+/* eslint-disable prefer-template */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-else-return */
+/* eslint-disable no-undef */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable object-shorthand */
 import React, {Component } from 'react';
-import { TextInput, Text, Button, View, FlatList, TouchableOpacity, StyleSheet, Image, Alert, ToastAndroid  } from 'react-native';
+import { TextInput, Text, Button, View, ToastAndroid  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { shared_styles } from './Styles/Shared';
+import { sharedStyles } from './Styles/Shared';
 
 class login extends Component {
 
@@ -50,25 +59,21 @@ class login extends Component {
         }
       })
       .then(async (responseJson)=>{
-        console.log(responseJson)
         await AsyncStorage.setItem('@session_token', responseJson.token);
         await AsyncStorage.setItem('@user_id',  responseJson.id.toString());
         this.getData();
         this.props.navigation.navigate("home")
       })
       .catch((error) => {
-        console.log(error);
         ToastAndroid.show(error, ToastAndroid.SHORT)
       })
     }
   }
 
   getData = async () => {
-    console.log("get profile data");
     const value = await AsyncStorage.getItem('@session_token');
-    const user_id = await AsyncStorage.getItem('@user_id');
-    console.log(value);
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + user_id,
+    const userId = await AsyncStorage.getItem('@user_id');
+    return fetch('http://10.0.2.2:3333/api/1.0.0/user/' + userId,
     {headers: {
         'X-Authorization': value
       }},)
@@ -87,44 +92,37 @@ class login extends Component {
         }
       })
     .then(async (responseJson) => {
-      let userFavourite_locations = [];
-      for (let index = 0; index < responseJson.favourite_locations.length; index++) {
-        userFavourite_locations.push(responseJson.favourite_locations[index].location_id);
+      let userFavouriteLocations = [];
+      for (let index = 0; index < responseJson.favourite_locations.length; index+=1) {
+        userFavouriteLocations.push(responseJson.favourite_locations[index].location_id);
       }
-      console.log(userFavourite_locations);
-      console.log(userFavourite_locations.length);
-      await AsyncStorage.setItem('@userFavourite_locations', JSON.stringify(userFavourite_locations));
+      await AsyncStorage.setItem('@userFavourite_locations', JSON.stringify(userFavouriteLocations));
 
       let userReviews = [];
-      for (let index = 0; index < responseJson.reviews.length; index++) {
+      for (let index = 0; index < responseJson.reviews.length; index+=1) {
         userReviews.push(responseJson.reviews[index].review.review_id);
       }
-      console.log(userReviews);
-      console.log(userReviews.length);
       await AsyncStorage.setItem('@userReviews', JSON.stringify(userReviews));
 
-      let userLiked_reviews = [];
-      for (let index = 0; index < responseJson.liked_reviews.length; index++) {
-        userLiked_reviews.push(responseJson.liked_reviews[index].review.review_id);
+      let userLikedReviews = [];
+      for (let index = 0; index < responseJson.liked_reviews.length; index+=1) {
+        userLikedReviews.push(responseJson.liked_reviews[index].review.review_id);
       }
-      console.log(userLiked_reviews);
-      console.log(userLiked_reviews.length);
-      await AsyncStorage.setItem('@userLiked_reviews', JSON.stringify(userLiked_reviews));
+      await AsyncStorage.setItem('@userLiked_reviews', JSON.stringify(userLikedReviews));
       
     })
     .catch((error) =>{
-        console.log(error);
+      ToastAndroid.show(error, ToastAndroid.SHORT)
     });
 }
 
     render(){
 
-        const navigation = this.props.navigation;
         return (
-            <View style={shared_styles.flexContainer}>
-                <Text style={shared_styles.subTitleText}>Login</Text>
+            <View style={sharedStyles.flexContainer}>
+                <Text style={sharedStyles.subTitleText}>Login</Text>
                 <TextInput placeholder="Email" onChangeText={this.updateEmail}/>
-                <TextInput maxLength={14} secureTextEntry={true} placeholder="Password" onChangeText={this.updatePassword}/>
+                <TextInput maxLength={14} secureTextEntry placeholder="Password" onChangeText={this.updatePassword}/>
                 <Button title="Log in" onPress={this.login}/>
             </View>
         );
